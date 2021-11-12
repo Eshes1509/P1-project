@@ -124,3 +124,6 @@ carRenter carRenterData(char userName[]) {
 
     return carRenter1;
 }
+
+/* Idéer til programmet */
+/* - Mulighed for at sortere biler efter pris, når man har valgt hvilken type bil du gerne vil have og listen med dem er kommet frem */
