@@ -1,3 +1,1 @@
 Jens Jensen, 87654321, jens@gmail.com, B, 20, 9200, 5.000000.
-Andrzej Dudko, 12345678, andrzej@gmail.com, A, 20, 9000, 5.000000.
-Andrzej Dudko, 12345678, andrzej@gmail.com, A, 20, 9000, 5.000000.
