@@ -54,8 +54,10 @@ int main(void) {
     int rPostalCode;
     double rRating[1];
     */
+
     int ch; // for getting chars out of users.txt
     int i = 0; // for the while loop
+    /*
     carRenter carRenter2; // i make a carRenter for easy debugging
     strcpy(carRenter2.name, "Andrzej Dudko");
     strcpy(carRenter2.phoneNum, "12345678");
@@ -75,6 +77,7 @@ int main(void) {
       printf("Could not open output file. Bye.");
       exit(EXIT_FAILURE);
     }
+    */
 
     input_file_pointer = fopen("users.txt", "r");
     if (output_file_pointer != NULL) {
@@ -121,6 +124,9 @@ int main(void) {
         //the custom datatype carRenter was defined earlier.
 
         carRenter tempCarRenter = carRenterData(fullName);
+        output_file_pointer = fopen("users.txt", "a");
+        fprintf(output_file_pointer, "%s, %s, %s, %s, %d, %d, %f.\n", tempCarRenter.name, tempCarRenter.phoneNum, tempCarRenter.Email, tempCarRenter.prefCarType, tempCarRenter.age, tempCarRenter.postalCode, tempCarRenter.rating[0]);
+        fclose(output_file_pointer);
         printf("Fulde navn: %s\nAlder: %d\nPostnummer: %d\nE-mail: %s\nTelefonnummer: %s\nForetrukne biltype: %s\n", tempCarRenter.name,tempCarRenter.age,tempCarRenter.postalCode, tempCarRenter.Email, tempCarRenter.phoneNum, tempCarRenter.prefCarType);
     }
 
