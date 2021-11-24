@@ -3,8 +3,8 @@
 ## Program feature
 
 <ul>
-  <li>First item</li>
-  <li>Second item</li>
+  <li>Rating system</li>
+  <li>Pris algoritme</li>
   <li>Third item</li>
   <li>Fourth item</li>
 </ul>
