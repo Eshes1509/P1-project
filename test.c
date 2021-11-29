@@ -133,7 +133,7 @@ carOwner carOwnerData() {
     scanf(" %c", &tempCarOwner.transmission);
 
         // open file for writing
-    fp = fopen ("owner.dat", "a");
+    fp = fopen ("owners.dat", "a");
     if (fp== NULL){
       fprintf(stderr, "\nError opened file\n");
       exit (1);
@@ -188,7 +188,7 @@ carRenter carRenterData() {
     scanf(" %c", &tempCarRenter.prefTransmissionType);
 
     // open file for writing
-    fp = fopen ("renter.dat", "a");
+    fp = fopen ("renters.dat", "a");
     if (fp == NULL){
       fprintf(stderr, "\nError opened file\n");
       exit (1);
@@ -213,7 +213,7 @@ carRenter carRenterDisplay(){
     int found = 0;
 
     // Open renter.dat for reading
-    fp = fopen ("renter.dat", "rb");
+    fp = fopen ("renters.dat", "rb");
     if (fp == NULL)
     {
     	fprintf(stderr, "\nError opening file\n");
@@ -249,7 +249,7 @@ carOwner carOwnerDisplay(){
     int found = 0;
 
     // Open owner.dat for reading
-    fp = fopen ("owner.dat", "rb");
+    fp = fopen ("owners.dat", "rb");
     if (fp == NULL)
     {
     	fprintf(stderr, "\nError opening file\n");
