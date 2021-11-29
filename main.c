@@ -32,13 +32,13 @@ int main(void) {
     char fullName[50];
     char ans;
     
-    printf("Hej, og velkommen til vores app, lad os starte med dit fulde navn: ");
+    printf("Hello and welcome to our, please enter your full name: ");
     getName(fullName);
     
-    printf("Hej %s!. Det foerste der skal ske er, at du skal vaelge om du vil leje eller udleje en bil\n", fullName);
+    printf("Hello %s!. First off, we would like to know whether you would want to rent a car or rent out a car\n", fullName);
 
     do {
-        printf("Oensker du at leje eller udleje en bil?\n'a': Lej en bil\n'b': Udlej en bil:\n");
+        printf("'a': Rent a  car\n'b': Rent out a car\n");
         ans = getchar();
     } while(ans !='a' && ans != 'b');
 
@@ -46,13 +46,13 @@ int main(void) {
         //the custom datatype carRenter was defined earlier.
 
         carRenter tempCarRenter = carRenterData(fullName);
-        printf("Fulde navn: %s\nAlder: %d\nPostnummer: %d\nE-mail: %s\nTelefonnummer: %s\nForetrukne biltype: %s\n", tempCarRenter.name,tempCarRenter.age,tempCarRenter.postalCode, tempCarRenter.Email, tempCarRenter.phoneNum, tempCarRenter.prefCarType);
+        printf("Full name: %s\nAge: %d\nPostal code: %d\nE-mail: %s\nPhone number: %s\nPreffered car type: %s\n", tempCarRenter.name,tempCarRenter.age,tempCarRenter.postalCode, tempCarRenter.Email, tempCarRenter.phoneNum, tempCarRenter.prefCarType);
     }
 
     else if (ans == 'b') {
         //the custom datatype carOwner was defined earlier.
         carOwner tempCarOwner = carOwnerData(fullName);
-        printf("Fulde navn: %s\nAlder: %d\nPostnummer: %d\nE-mail: %s\nTelefonnummer: %s\nDin biltype: %s\n", tempCarOwner.name,tempCarOwner.age,tempCarOwner.postalCode, tempCarOwner.Email, tempCarOwner.phoneNum, tempCarOwner.carType);
+        printf("Full name: %s\nAge: %d\nPostal code: %d\nE-mail: %s\nPhone Number: %s\nYour car type: %s\n", tempCarOwner.name,tempCarOwner.age,tempCarOwner.postalCode, tempCarOwner.Email, tempCarOwner.phoneNum, tempCarOwner.carType);
     }
     
 }
@@ -81,19 +81,19 @@ carOwner carOwnerData(char userName[]) {
 
     strcpy(carOwner1.name,userName);
 
-    printf("Hej %s, for at kommme godt i gang, skal vi have noget mere data om dig, venligst foelg instrukserne:\nLad os starte med din alder: ", carOwner1.name);
+    printf("Hello %s, we would like to know more about you.\nLet us start off with your age: ", carOwner1.name);
     scanf("%d",&carOwner1.age);
     //Postnummer
-    printf("Indtast her postkoden for det omraade i Aalborg, som du oensker at udleje din bil i: ");
+    printf("Enter the postal code, you would like to rent out your car in: ");
     scanf("%d", &carOwner1.postalCode);
     //Email
-    printf("Der skal derudover bruges nogle personlige oplysninger omkring dig. Indtast nu din E-mail: ");
+    printf("Furthermore, we would like to gather some more personal details as well. Please enter your E-mail: ");
     scanf("%s",&carOwner1.Email);
     //Tlf.nr.
-    printf("Indtast nu tlf.nr.: ");
+    printf("Please enter your Phone number: ");
     scanf("%s",&carOwner1.phoneNum);
     //Foretrukne bil type
-    printf("Indtast hvilken type bil du ejer: "); /* Type A - dyre B - middel C - billige */
+    printf("What car type is the car you are renting out?: "); /* Type A - dyre B - middel C - billige */
     scanf("%s",&carOwner1.carType);
     
     return carOwner1;
@@ -107,19 +107,19 @@ carRenter carRenterData(char userName[]) {
     strcpy(carRenter1.name,userName);
 
     //alder
-    printf("Hej %s, for at kommme godt i gang, skal vi have noget mere data om dig, venligst foelg instrukserne:\nLad os starte med din alder: ", carRenter1.name);
+    printf("Hello %s, we would like to know more about you.\nLet us start off with your age: ", carRenter1.name);
     scanf("%d",&carRenter1.age);
     //Postnummer
-    printf("Indtast her postkoden for det omraade i Aalborg, som du oensker at leje en bil i: ");
+    printf("Enter the postal code, you would like to rent a car in: ");
     scanf("%d", &carRenter1.postalCode);
     //Email
-    printf("Der skal derudover bruges nogle personlige oplysninger omkring dig. Indtast nu din E-mail: ");
+    printf("Furthermore, we would like to gather some more personal details as well. Please enter your E-mail: ");
     scanf("%s",&carRenter1.Email);
     //Tlf.nr.
-    printf("Indtast nu tlf.nr.: ");
+    printf("Please enter your Phone number: ");
     scanf("%s",&carRenter1.phoneNum);
     //Foretrukne bil type
-    printf("Indtast nu den oenskede type bil, du oensker at leje: ");
+    printf("What car type is the car you want to rent?: ");
     scanf("%s",&carRenter1.prefCarType);
 
     return carRenter1;
