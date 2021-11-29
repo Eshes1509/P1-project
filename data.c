@@ -67,7 +67,7 @@ int main(void) {
                "Age: %d\n"
                "Postal code: %d\n"
                "Preffered price range: %c\n"
-               "Gear type: %c\n"
+               "Transmission type: %c\n"
                "Stars: %fl.\n", tempCarRenter.name, tempCarRenter.phoneNum, tempCarRenter.Email, tempCarRenter.age, tempCarRenter.postCode, tempCarRenter.prefCarType, tempCarRenter.prefTransmissionType, tempCarRenter.rating[0]);
     }
 
@@ -86,7 +86,7 @@ int main(void) {
                "Car name: %s\n"
                "Model year: %d\n"
                "Kilometers driven: %d\n"
-               "Gear type: %c\n"
+               "Transmission type: %c\n"
                "Stars: %fl.\n", tempCarOwner.name, tempCarOwner.phoneNum, tempCarOwner.Email, tempCarOwner.age, tempCarOwner.postCode, tempCarOwner.price, tempCarOwner.carName, tempCarOwner.modelYear, tempCarOwner.odometer, tempCarOwner.transmission, tempCarOwner.rating[0]);
     }
 
@@ -119,7 +119,7 @@ carOwner carOwnerData(char userName[]) {
     // Name
     strcpy(carOwner1.name,userName);
 
-    // Phonenumber
+    // Phone number
     printf("hello %s. Please enter your phone number: ",carOwner1.name);
     scanf("%s", &carOwner1.phoneNum);
 
@@ -149,11 +149,11 @@ carOwner carOwnerData(char userName[]) {
     scanf("%d", &carOwner1.modelYear);
 
     // Kilometers driven by CO's car
-    printf("Please enter the the amount of kilometers you car has driven: ");
+    printf("Please enter your car's odometer reading: ");
     scanf("%d", &carOwner1.odometer);
 
     // CO's car's transmission
-    printf("Is your car using automatic gearing or manual? (a = auto, b = manual): ");
+    printf("Is your car using automatic transmission or manual? (a = auto, b = manual): ");
     scanf("%c", &temp);
     scanf("%c", &carOwner1.transmission);
 
@@ -185,12 +185,12 @@ carRenter carRenterData(char userName[]) {
     scanf("%d", &carRenter1.postCode);
 
     // Preffered car type
-    printf("Please select a price range for which you want to rent a car (a = 0 for x kr, b = x+1 for y kr, c = y+1 for z kr): ");
+    printf("Please select a price range for which you want to rent a car (a: 0 to x kr, b: x+1 to y kr, c: y+1 to z kr): ");
     scanf("%c", &temp);
     scanf("%c", &carRenter1.prefCarType);
 
     // Preffered transmission type
-    printf("Please enter preffered gear type: (a = automat, b = manuelt,  c = begge)): ");
+    printf("Please enter preffered transmission type: (a = automatic, b = manual,  c = both)): ");
     scanf("%c", &temp);
     scanf("%c", &carRenter1.prefTransmissionType);
 
