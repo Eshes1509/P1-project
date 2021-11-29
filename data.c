@@ -44,13 +44,13 @@ int main(void) {
 
     FILE *output_file_pointer; // pointer to a file
 
-    printf("Hej, og velkommen til vores app, lad os starte med dit fulde navn: ");
+    printf("Hello and welcome to our, please enter your full name: ");
     getName(fullName);
 
-    printf("Hej %s!. Det foerste der skal ske er, at du skal vaelge om du vil leje eller udleje en bil\n", fullName);
+    printf("Hello %s!. First off, we would like to know whether you would want to rent a car or rent out a car\n", fullName);
 
     do {
-        printf("Oensker du at leje eller udleje en bil?\n'a': Lej en bil\n'b': Udlej en bil:\n");
+        printf("'a': Rent a  car\n'b': Rent out a car\n");
         ans = getchar();
     } while(ans !='a' && ans != 'b');
 
@@ -61,14 +61,14 @@ int main(void) {
         output_file_pointer = fopen("renters.txt", "a");
         fprintf(output_file_pointer, "%s, %s, %s, %d, %d, %c, %c, %fl.\n", tempCarRenter.name, tempCarRenter.phoneNum, tempCarRenter.Email, tempCarRenter.age, tempCarRenter.postCode, tempCarRenter.prefCarType, tempCarRenter.prefTransmissionType, tempCarRenter.rating[0]);
         fclose(output_file_pointer);
-        printf("Fulde navn: %s\n"
-               "Telefonnummer: %s\n"
+        printf("Full name: %s\n"
+               "Phone number: %s\n"
                "E-mail: %s\n"
-               "Alder: %d\n"
-               "Postnummer: %d\n"
-               "Foretrukket prisklasse: %c\n"
-               "Gearskift type: %c\n"
-               "Stjerner: %fl.\n", tempCarRenter.name, tempCarRenter.phoneNum, tempCarRenter.Email, tempCarRenter.age, tempCarRenter.postCode, tempCarRenter.prefCarType, tempCarRenter.prefTransmissionType, tempCarRenter.rating[0]);
+               "Age: %d\n"
+               "Postal code: %d\n"
+               "Preffered price range: %c\n"
+               "Gear type: %c\n"
+               "Stars: %fl.\n", tempCarRenter.name, tempCarRenter.phoneNum, tempCarRenter.Email, tempCarRenter.age, tempCarRenter.postCode, tempCarRenter.prefCarType, tempCarRenter.prefTransmissionType, tempCarRenter.rating[0]);
     }
 
     else if (ans == 'b') {
@@ -77,17 +77,17 @@ int main(void) {
         output_file_pointer = fopen("owners.txt", "a");
         fprintf(output_file_pointer, "%s, %s, %s, %d, %d, %d, %s, %d, %d, %c, %fl.\n", tempCarOwner.name, tempCarOwner.phoneNum, tempCarOwner.Email, tempCarOwner.age, tempCarOwner.postCode, tempCarOwner.price, tempCarOwner.carName, tempCarOwner.modelYear, tempCarOwner.odometer, tempCarOwner.transmission, tempCarOwner.rating[0]);
         fclose(output_file_pointer);
-        printf("Fulde navn: %s\n"
-               "Telefonnummer: %s\n"
+        printf("Full name: %s\n"
+               "Phone number: %s\n"
                "E-mail: %s\n"
-               "Alder: %d\n"
-               "Postnummer: %d\n"
-               "Pris/time: %d\n"
-               "Bil navn: %s\n"
-               "Modelaar: %d\n"
-               "Kilometer koert: %d\n"
-               "Gearskift type: %c\n"
-               "Stjerner: %fl.\n", tempCarOwner.name, tempCarOwner.phoneNum, tempCarOwner.Email, tempCarOwner.age, tempCarOwner.postCode, tempCarOwner.price, tempCarOwner.carName, tempCarOwner.modelYear, tempCarOwner.odometer, tempCarOwner.transmission, tempCarOwner.rating[0]);
+               "Age: %d\n"
+               "Postal code: %d\n"
+               "Price/hour: %d\n"
+               "Car name: %s\n"
+               "Model year: %d\n"
+               "Kilometers driven: %d\n"
+               "Gear type: %c\n"
+               "Stars: %fl.\n", tempCarOwner.name, tempCarOwner.phoneNum, tempCarOwner.Email, tempCarOwner.age, tempCarOwner.postCode, tempCarOwner.price, tempCarOwner.carName, tempCarOwner.modelYear, tempCarOwner.odometer, tempCarOwner.transmission, tempCarOwner.rating[0]);
     }
 
 }
@@ -120,40 +120,40 @@ carOwner carOwnerData(char userName[]) {
     strcpy(carOwner1.name,userName);
 
     // Phonenumber
-    printf("Indtast nu tlf.nr.: ");
+    printf("hello %s. Please enter your phone number: ",carOwner1.name);
     scanf("%s", &carOwner1.phoneNum);
 
     // Email
-    printf("Der skal derudover bruges nogle personlige oplysninger omkring dig. Indtast nu din E-mail: ");
+    printf("Please enter your E-mail: ");
     scanf("%s", &carOwner1.Email);
 
     // Age
-    printf("Hej %s, for at kommme godt i gang, skal vi have noget mere data om dig, venligst foelg instrukserne:\nLad os starte med din alder: ", carOwner1.name);
+    printf("Please enter your age: ");
     scanf("%d", &carOwner1.age);
 
     // Postcode
-    printf("Indtast her postkoden for det omraade i Aalborg, som du oensker at udleje din bil i: ");
+    printf("Please enter the postal code for where car is placed: ");
     scanf("%d", &carOwner1.postCode);
 
     // Price of CO's car
-    printf("Indtast hvor meget din bil skal koste at udleje per time: ");
+    printf("Please enter the price per hour for your car ");
     scanf("%d", &carOwner1.price);
 
     // CO's car's name
-    printf("Intast navnet af din bil: ");
+    printf("Please enter the name of your car: ");
     scanf("%c",&temp);
     scanf("%[^\n]", carOwner1.carName);
 
     // Model year of CO's car
-    printf("Indtast modelaar af din bil: ");
+    printf("Please enter the model year of your car ");
     scanf("%d", &carOwner1.modelYear);
 
     // Kilometers driven by CO's car
-    printf("Indtast kilometertallet af din bil: ");
+    printf("Please enter the the amount of kilometers you car has driven: ");
     scanf("%d", &carOwner1.odometer);
 
     // CO's car's transmission
-    printf("Intast om din bil har automat eller manuelt gear (a = auto, b = manuelt): ");
+    printf("Is your car using automatic gearing or manual? (a = auto, b = manual): ");
     scanf("%c", &temp);
     scanf("%c", &carOwner1.transmission);
 
@@ -169,29 +169,28 @@ carRenter carRenterData(char userName[]) {
     strcpy(carRenter1.name,userName);
 
     // Phonenumber
-    printf("Indtast nu tlf.nr.: ");
+    printf("hello %s. Please enter your phone number: ", carRenter1.name);
     scanf("%s", &carRenter1.phoneNum);
 
     // Email
-    printf("Der skal derudover bruges nogle personlige oplysninger omkring dig. Indtast nu din E-mail: ");
+    printf("Please enter your E-mail: ");
     scanf("%s", &carRenter1.Email);
 
     // Age
-    printf("Hej %s, for at kommme godt i gang, skal vi have noget mere data om dig, venligst foelg instrukserne:\nLad os starte med din alder: ", carRenter1.name);
+    printf("Please enter your age:");
     scanf("%d", &carRenter1.age);
 
     // Postcode
-    printf("Indtast her postkoden for det omraade i Aalborg, som du oensker at leje en bil i: ");
+    printf("Please enter the postal code for where you would like rent a car: ");
     scanf("%d", &carRenter1.postCode);
 
-
     // Preffered car type
-    printf("Indtast nu den oenskede type bil, du oensker at leje (a = 0 til x kr, b = x+1 til y kr, c = y+1 til z kr): ");
+    printf("Please select a price range for which you want to rent a car (a = 0 for x kr, b = x+1 for y kr, c = y+1 for z kr): ");
     scanf("%c", &temp);
     scanf("%c", &carRenter1.prefCarType);
 
     // Preffered transmission type
-    printf("Indtast din foretrukne gearskift (a = automat, b = manuelt,  c = begge)): ");
+    printf("Please enter preffered gear type: (a = automat, b = manuelt,  c = begge)): ");
     scanf("%c", &temp);
     scanf("%c", &carRenter1.prefTransmissionType);
 
