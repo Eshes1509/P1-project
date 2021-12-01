@@ -42,31 +42,30 @@ void edit_car_owner();
 int main(void) {
     int ans;
 
-    printf("1. Sign in\n2. Sign up as renter\n3. Sign up as owner\n4. Edit car renter\n5. Edit car owner\n6. Display car renter information\n7. Display car owner information\n8. Display all cars\n");
-    do{
-      scanf("%d", &ans);  
-    } while(ans < 1 && ans > 8);
-    
-    switch (ans)
-    {
-    case 1: 
-      break;
-    case 2: carRenterData();
-      break;
-    case 3: carOwnerData();
-      break;
-    case 4: edit_car_renter();
-      break;
-    case 5: edit_car_owner();
-      break;
-    case 6: carRenterDisplay();
-      break;
-    case 7: carOwnerDisplay();
-      break;
-    case 8: display_all_cars();
-      break;
+    while(1){
+      printf("1. Sign up as renter\n2. Sign up as owner\n3. Edit car renter\n4. Edit car owner\n5. Display car renter information\n6. Display car owner information\n7. Display all cars\n8. Exit\n");
+      do{
+        scanf("%d", &ans);  
+      } while(ans < 1 && ans > 8);
+      
+      switch (ans){
+      case 1: carRenterData();
+        break;
+      case 2: carOwnerData();
+        break;
+      case 3: edit_car_renter();
+        break;
+      case 4: edit_car_owner();
+        break;
+      case 5: carRenterDisplay();
+        break;
+      case 6: carOwnerDisplay();
+        break;
+      case 7: display_all_cars();
+        break;
+      case 8: return 0;
+      }
     }
-
     return 0;
 }
 
