@@ -40,53 +40,53 @@ void edit_car_renter();
 void edit_car_owner();
 
 int main(void) {
-    int ans;
+  int ans;
 
-    printf("1. Sign in\n2. Sign up as renter\n3. Sign up as owner\n4. Edit car renter\n5. Edit car owner\n6. Display car renter information\n7. Display car owner information\n8. Display all cars\n");
-    do{
-      scanf("%d", &ans);  
-    } while(ans < 1 && ans > 8);
-    
-    switch (ans)
-    {
-    case 1: 
-      break;
-    case 2: carRenterData();
-      break;
-    case 3: carOwnerData();
-      break;
-    case 4: edit_car_renter();
-      break;
-    case 5: edit_car_owner();
-      break;
-    case 6: carRenterDisplay();
-      break;
-    case 7: carOwnerDisplay();
-      break;
-    case 8: display_all_cars();
-      break;
-    }
+  printf("1. Sign in\n2. Sign up as renter\n3. Sign up as owner\n4. Edit car renter\n5. Edit car owner\n6. Display car renter information\n7. Display car owner information\n8. Display all cars\n");
+  do{
+    scanf("%d", &ans);  
+  } while(ans < 1 && ans > 8);
+  
+  switch (ans)
+  {
+  case 1: 
+    break;
+  case 2: carRenterData();
+    break;
+  case 3: carOwnerData();
+    break;
+  case 4: edit_car_renter();
+    break;
+  case 5: edit_car_owner();
+    break;
+  case 6: carRenterDisplay();
+    break;
+  case 7: carOwnerDisplay();
+    break;
+  case 8: display_all_cars();
+    break;
+  }
 
-    return 0;
+  return 0;
 }
 
 //The function that optains the name of the user and car. Use of dynamic memory allocation. Remember to free(); when done using it
 void getName (char name[]) {
 
-    char *fullName = (char*) malloc(50);
+  char *fullName = (char*) malloc(50);
 
-    /*Checks if memory allocation was sucessfull*/
-    if (fullName == NULL) {
-        printf("Memory allocation failed");
-        exit(0);
-    }
+  /*Checks if memory allocation was sucessfull*/
+  if (fullName == NULL) {
+    printf("Memory allocation failed");
+    exit(0);
+  }
 
-    //Is able to obtain a string including spaces
-    gets(fullName);
+  //Is able to obtain a string including spaces
+  gets(fullName);
 
-    strcpy(name, fullName);
+  strcpy(name, fullName);
 
-    free(fullName);
+  free(fullName);
 }
 
 //The function that fetches data for a car owner
