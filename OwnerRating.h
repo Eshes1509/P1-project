@@ -2,9 +2,11 @@
 #include<stdlib.h>
 #include<stdbool.h>
 
-int main (void) {
+typedef struct transactionData {
+    int transactionID;
+    int renterID;
+    int ownerID;
+    bool isSame;
+} transactionDetails;
 
-    
-    return 0;
 
-}

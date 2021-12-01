@@ -1,9 +1,12 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+time_t t;
+srand((unsigned) time(&t));
 
 typedef struct carOwnerData {
     // values set by user
+    int     ID;
     char    name[50]; // Name of Cor Owner
     char    phoneNum[9]; // Phone number of CO
     char    Email[50]; // Email of CO
@@ -19,6 +22,7 @@ typedef struct carOwnerData {
 } carOwner;
 
 typedef struct carRenterData {
+    int     ID;
     char    name[50]; // name of Car Renter
     char    phoneNum[9]; // Phone number of CR
     char    Email[50]; // Email of CR
@@ -95,6 +99,8 @@ carOwner carOwnerData() {
     carOwner tempCarOwner;
     char name[50];
 
+    //ID
+    tempCarOwner.ID = ((rand() % 999999) + 100000);
     // Name
     printf("Please enter your name: ");
     fgets(tempCarOwner.name, 50, stdin);
@@ -164,6 +170,8 @@ carRenter carRenterData() {
     carRenter tempCarRenter;
     char name[50];
     
+    //ID
+    tempCarOwner.ID = ((rand() % 999999) + 100000);
     // Name
     printf("Please enter your name: ");
     fgets(tempCarRenter.name, 50, stdin);
