@@ -34,11 +34,13 @@ carRenter carRenterData();
 carOwner carOwnerData();
 carRenter carRenterSelect();
 carOwner carOwnerSelect();
+carRenter carRenterDisplay(carRenter carRenter1);
+carOwner carOwnerDisplay(carOwner carOwner1);
 
 int main(void) {
     int ans;
-    carRenter tempCarRenter;
-    carOwner tempCarOwner;
+    carRenter carRenter1;
+    carOwner carOwner1;
 
     printf("1. Sign in\n2. Sign up\n");
     do{
@@ -52,12 +54,42 @@ int main(void) {
       } while(ans < 1 && ans > 2);      
 
       if(ans == 1){
-        tempCarRenter = carRenterSelect();
-        printf("Welcome back %s!", tempCarRenter.name);
+        carRenter1 = carRenterSelect();
+        printf("Welcome back %s!\n", carRenter1.name);
+
+        printf("1. Rent a car\n2. View your profile\n3. Edit your profile\n");
+        do{
+          scanf("%d", &ans);  
+        } while(ans < 1 && ans > 3);
+
+        if(ans == 1){
+
+        }
+        else if(ans == 2){
+          carRenterDisplay(carRenter1);
+        }
+        else if(ans == 3){
+
+        }
       }
       else if(ans == 2){
-        tempCarOwner = carOwnerSelect();
-        printf("Welcome back %s!", tempCarOwner.name);
+        carOwner1 = carOwnerSelect();
+        printf("Welcome back %s!\n", carOwner1.name);
+            
+        printf("1. Your car rental history\n2. View your profile\n3. Edit your profile\n");
+        do{
+          scanf("%d", &ans);  
+        } while(ans < 1 && ans > 3);
+
+        if(ans == 1){
+
+        }
+        else if(ans == 2){
+          carOwnerDisplay(carOwner1);
+        }
+        else if(ans == 3){
+          
+        }
       }
     }
     else if(ans == 2){
@@ -286,4 +318,18 @@ carOwner carOwnerSelect(){
     // close file
     fclose (fp);    
     return tempCarOwner;
+}
+
+carRenter carRenterDisplay(carRenter carRenter1){
+
+    printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nPreferred car type: %c\nPreferred transmission type: %c\n",
+    carRenter1.name, carRenter1.phoneNum, carRenter1.Email, carRenter1.age, carRenter1.postCode, carRenter1.prefCarType, carRenter1.prefTransmissionType);   
+
+}
+
+carOwner carOwnerDisplay(carOwner carOwner1){
+
+    printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nCar price: %d dkk per hour\nCar name: %s\nModel year: %d\nKilometers driven: %d\nTransmission type: %c\n",
+    carOwner1.name, carOwner1.phoneNum, carOwner1.Email, carOwner1.age, carOwner1.postCode, carOwner1.price, carOwner1.carName, carOwner1.modelYear, carOwner1.odometer, carOwner1.transmission);   
+
 }
