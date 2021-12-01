@@ -32,15 +32,18 @@ typedef struct carRenterData {
 
 carRenter carRenterData();
 carOwner carOwnerData();
-carRenter carRenterSelect();
-carOwner carOwnerSelect();
 carRenter carRenterDisplay(carRenter carRenter1);
 carOwner carOwnerDisplay(carOwner carOwner1);
 carRenter carRenterEdit(carRenter carRenter1);
 carOwner carOwnerEdit(carOwner carOwner1);
+carRenter carRenterSelect(char Email[]);
+carOwner carOwnerSelect(char Email[]);
+int userSelect(char Email[]);
 
 int main(void) {
-    int ans;
+    int ans = 0;
+    int isRenter = -1;
+    char Email[50];
     carRenter carRenter1;
     carOwner carOwner1;
 
@@ -50,15 +53,17 @@ int main(void) {
     } while(ans < 1 && ans > 2);
 
     if(ans == 1){
-      printf("1. Sign in as renter\n2. Sign in as owner\n");
+      printf("Please enter your email: ");
+      scanf("%s", &Email); 
+
       do{
-        scanf("%d", &ans);  
-      } while(ans < 1 && ans > 2);      
-
-      if(ans == 1){
-        carRenter1 = carRenterSelect();
+        isRenter = userSelect(Email); 
+      } while(isRenter < 0);
+      
+      if(isRenter == 1){
+        carRenter1 = carRenterSelect(Email);
         printf("Welcome back %s!\n", carRenter1.name);
-
+        
         printf("1. Rent a car\n2. View your profile\n3. Edit your profile\n");
         do{
           scanf("%d", &ans);  
@@ -74,11 +79,11 @@ int main(void) {
           carRenterEdit(carRenter1);
         }
       }
-      else if(ans == 2){
-        carOwner1 = carOwnerSelect();
+      else if(isRenter == 0){
+        carOwner1 = carOwnerSelect(Email);
         printf("Welcome back %s!\n", carOwner1.name);
-            
-        printf("1. Your car rental history\n2. View your profile\n3. Edit your profile\n");
+
+        printf("1. View your car rental history\n2. View your profile\n3. Edit your profile\n");
         do{
           scanf("%d", &ans);  
         } while(ans < 1 && ans > 3);
@@ -252,10 +257,67 @@ carOwner carOwnerData() {
     fclose (fp);
 }
 
-carRenter carRenterSelect(){
+int userSelect(char Email[]){
+    FILE *fp, *fp1;
+    carRenter tempCarRenter;
+    carOwner tempCarOwner;
+    int found = 0;
+    
+    // Open renters.dat for reading
+    fp = fopen ("renters.dat", "rb");
+    if (fp == NULL)
+    {
+    	fprintf(stderr, "\nError opening file\n");
+    	exit (1);
+    }
+    // Open owners.dat for reading
+    fp1 = fopen ("owners.dat", "rb");
+    if (fp1 == NULL)
+    {
+    	fprintf(stderr, "\nError opening file\n");
+    	exit (1);
+    }
+
+    // read file contents till end of file
+    while(1){
+      fread(&tempCarRenter, sizeof(tempCarRenter), 1, fp);    
+      if(feof(fp)){
+        break;
+      }
+      if(!strcmp(tempCarRenter.Email, Email)){
+        found = 1;
+        fclose(fp);
+        fclose(fp1);
+        return 1;
+      }	
+    }
+
+    while(1){
+      fread(&tempCarOwner, sizeof(tempCarOwner), 1, fp1);    
+      if(feof(fp1)){
+        break;
+      }
+      if(!strcmp(tempCarOwner.Email, Email)){
+        found = 1;
+        fclose(fp);
+        fclose(fp1);        
+        return 0; 
+      }	
+    }    
+
+    if(found == 0){
+      printf("Sorry no record found\n");
+    }
+
+    // close file
+    fclose (fp);   
+    fclose (fp1); 
+    return -1;
+}
+
+carRenter carRenterSelect(char Email[]){
     FILE *fp;
     carRenter tempCarRenter;
-    char Email[50];
     int found = 0;
 
     // Open renters.dat for reading
@@ -265,9 +327,7 @@ carRenter carRenterSelect(){
     	fprintf(stderr, "\nError opening file\n");
     	exit (1);
     }
-
-    printf("Please enter your email: ");
-    scanf("%s", &Email); 
+ 
     // read file contents till end of file
     while(1){
       fread(&tempCarRenter, sizeof(tempCarRenter), 1, fp);    
@@ -287,10 +347,9 @@ carRenter carRenterSelect(){
     return tempCarRenter;
 }
 
-carOwner carOwnerSelect(){
+carOwner carOwnerSelect(char Email[]){
     FILE *fp;
     carOwner tempCarOwner;
-    char Email[50];
     int found = 0;
 
     // Open owners.dat for reading
@@ -301,8 +360,6 @@ carOwner carOwnerSelect(){
     	exit (1);
     }
 
-    printf("Please enter your email: ");
-    scanf("%s", &Email); 
     // read file contents till end of file
     while(1){
       fread(&tempCarOwner, sizeof(tempCarOwner), 1, fp);    
@@ -337,8 +394,7 @@ carOwner carOwnerDisplay(carOwner carOwner1){
 }
 
 carRenter carRenterEdit(carRenter carRenter1){
-    FILE *fp;
-    FILE *fp1;
+    FILE *fp, *fp1;
     carRenter tempCarRenter;
     char name[50];
     int found = 0;
@@ -399,8 +455,7 @@ carRenter carRenterEdit(carRenter carRenter1){
 }
 
 carOwner carOwnerEdit(carOwner carOwner1){
-    FILE *fp;
-    FILE *fp1;
+    FILE *fp, *fp1;
     carOwner tempCarOwner;
     char name[50];
     int found = 0;
