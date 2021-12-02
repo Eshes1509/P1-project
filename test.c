@@ -1,8 +1,8 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include<makeDeal.h>
 #include<transactions.dat>
+#include<makeDeal.h>
 
 typedef struct carOwnerData {
     // values set by user
@@ -459,48 +459,14 @@ void edit_car_owner(){
     fclose(fp1);    
 }
 
+//Make deal between an existing car Renter and an existing car owner
 void transactionTest (int renterID, int ownerID) {
-  bool found;
-  FILE *fp, *fp1;
-  carRenter tempCarRenter;
-  carOwner tempCarOwner;
+  carOwner    DealOwner;
+  carRenter   DealRenter;
 
-  fp = fopen("owners.dat", "a");
-  fp1 = fopen("renters.dat", "a");
+  DealOwner = carOwnerDisplay();
+  DealRenter = carRenterDisplay();
 
-  char *userEmail[] = (char*) malloc(50);
-
-  printf("Please enter your own e-mail:\n");
-  gets(userEmail);
-
-  //check if e-mail is in registry
-  while(1){
-    //Run through first file
-    fread(&userEmail, sizeof(char[50]), 1, fp);    
-    if(feof(fp)) {
-      break;
-    }
-    //Run through second file
-    fread(&userEmail, sizeof(char[50]), 1, fp1);
-    if(feof(fp1)) {
-      break;
-    }
-
-    if(!strcmp(tempCarOwner.Email, userEmail)){
-      found = 1;
-    }	
-    if(!strcmp(tempCarRenter.Email, userEmail)) {
-      found = 1;
-    }
-  }
-
-    if(found == 0){
-      printf("You e-mail is not registrered, please sign up before making a deal");
-    }
-    // close files
-    fclose (fp);
-    flcose (fp1);    
-
-  //check if desired user e-mail is in registry
+  makeDeal(DealRenter.ID, DealOwner.ID);
 
 }
