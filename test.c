@@ -44,6 +44,7 @@ void display_all_cars();
 void edit_car_renter();
 void edit_car_owner();
 void transactionTest(void);
+void ratePerson(void);
 
 int main(void) {
   int ans;
@@ -85,10 +86,11 @@ int main(void) {
   case 10:
     ratePerson();
     break;
+    
   default:
     break;
   }
-
+  fflush(stdin);
   return 0;
 }
 
@@ -254,14 +256,14 @@ carRenter carRenterDisplay(){
     }
 
     printf("Please enter car renter's email: ");
-    scanf("%s", &Email); 
+    gets(Email);
     // read file contents till end of file
     while(1){
       fread(&tempCarRenter, sizeof(tempCarRenter), 1, fp);    
       if(feof(fp)){
         break;
       }
-      if(!strcmp(tempCarRenter.Email, Email)){
+      if(strcmp(tempCarRenter.Email, Email)){
         found = 1;
         printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nPreferred car type: %c\nPreferred transmission type: %c\nID: %d",
         tempCarRenter.name, tempCarRenter.phoneNum, tempCarRenter.Email, tempCarRenter.age, tempCarRenter.postCode, tempCarRenter.prefCarType, tempCarRenter.prefTransmissionType,tempCarRenter.ID);   
@@ -297,7 +299,7 @@ carOwner carOwnerDisplay(){
       if(feof(fp)){
         break;
       }
-      if(!strcmp(tempCarOwner.Email, Email)){
+      if(strcmp(tempCarOwner.Email, Email)){
         found = 1;
         printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nCar price: %d\nCar name: %s\nModel year: %d\nKilometers driven: %d\nTransmission type: %c\nID: %d",
         tempCarOwner.name, tempCarOwner.phoneNum, tempCarOwner.Email, tempCarOwner.age, tempCarOwner.postCode, tempCarOwner.price, tempCarOwner.carName, tempCarOwner.modelYear, tempCarOwner.odometer, tempCarOwner.transmission,tempCarOwner.ID);   
@@ -474,9 +476,9 @@ void transactionTest (void) {
   carOwner    dealOwner;
   carRenter   dealRenter;
 
+  dealRenter = carRenterDisplay();
   dealOwner = carOwnerDisplay();
   
-  dealRenter = carRenterDisplay();
 
   makeDeal(dealRenter.ID, dealOwner.ID);
 
