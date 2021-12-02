@@ -1,8 +1,10 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<OwnerRating.h>
+#include<transactions.dat>
 time_t t;
-srand((unsigned) time(&t));
+srand(t);
 
 typedef struct carOwnerData {
     // values set by user
@@ -171,7 +173,7 @@ carRenter carRenterData() {
     char name[50];
     
     //ID
-    tempCarOwner.ID = ((rand() % 999999) + 100000);
+    tempCarRenter.ID = ((rand() % 999999) + 100000);
     // Name
     printf("Please enter your name: ");
     fgets(tempCarRenter.name, 50, stdin);
