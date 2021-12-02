@@ -256,14 +256,14 @@ carRenter carRenterDisplay(){
     }
 
     printf("Please enter car renter's email: ");
-    gets(Email);
+    scanf("%s", &Email); 
     // read file contents till end of file
     while(1){
       fread(&tempCarRenter, sizeof(tempCarRenter), 1, fp);    
       if(feof(fp)){
         break;
       }
-      if(strcmp(tempCarRenter.Email, Email)){
+      if(!strcmp(tempCarRenter.Email, Email)){
         found = 1;
         printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nPreferred car type: %c\nPreferred transmission type: %c\nID: %d",
         tempCarRenter.name, tempCarRenter.phoneNum, tempCarRenter.Email, tempCarRenter.age, tempCarRenter.postCode, tempCarRenter.prefCarType, tempCarRenter.prefTransmissionType,tempCarRenter.ID);   
@@ -299,7 +299,7 @@ carOwner carOwnerDisplay(){
       if(feof(fp)){
         break;
       }
-      if(strcmp(tempCarOwner.Email, Email)){
+      if(!strcmp(tempCarOwner.Email, Email)){
         found = 1;
         printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nCar price: %d\nCar name: %s\nModel year: %d\nKilometers driven: %d\nTransmission type: %c\nID: %d",
         tempCarOwner.name, tempCarOwner.phoneNum, tempCarOwner.Email, tempCarOwner.age, tempCarOwner.postCode, tempCarOwner.price, tempCarOwner.carName, tempCarOwner.modelYear, tempCarOwner.odometer, tempCarOwner.transmission,tempCarOwner.ID);   
