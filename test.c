@@ -3,7 +3,7 @@
 #include<string.h>
 #include<time.h>
 #include<stdbool.h>
-#include "makeDeal.h"
+#include "CarRentalFunctions.h"
 
 carOwner carOwnerData(void);
 carOwner carOwnerDisplay(void);
@@ -14,7 +14,8 @@ void edit_car_renter(void);
 void edit_car_owner(void);
 void transactionTest(void);
 void dealConfirm(void);
-
+void getName (char name[]);
+void identifyUser(char userEmail[], char ans);
 int main(void) {
   int ans;
   srand(time(NULL));
@@ -64,23 +65,6 @@ int main(void) {
 }
 
 //The function that optains the name of the user and car. Use of dynamic memory allocation. Remember to free(); when done using it
-void getName (char name[]) {
-
-  char *fullName = (char*) malloc(50);
-
-  /*Checks if memory allocation was sucessfull*/
-  if (fullName == NULL) {
-    printf("Memory allocation failed");
-    exit(0);
-  }
-
-  //Is able to obtain a string including spaces
-  gets(fullName);
-
-  strcpy(name, fullName);
-
-  free(fullName);
-}
 
 void display_all_cars(void){
     FILE *fp;
@@ -248,7 +232,7 @@ void transactionTest (void) {
   dealRenter = carRenterDisplay();
   dealOwner = carOwnerDisplay();
   
-  makeDeal(dealRenter.ID, dealOwner.ID);
+  makeDeal(dealRenter.ID, dealOwner.ID, dealRenter.Email, dealOwner.Email);
 }
 
 void dealConfirm (void) {
@@ -259,7 +243,6 @@ void dealConfirm (void) {
   tranDet     tempTrans;
   bool        found;
   char        ans;
-  int         dealsAmount = 0, secondID, transID;
   
   printf("Have you rented or rented out a car?\na: rented a car\nb: rented out a car");
 
@@ -290,12 +273,20 @@ void dealConfirm (void) {
     if(feof(fp)){
       break;
     }
-    if(tempTrans.renterID == dealRenter.ID) {
-      secondID = tempTrans.ownerID;
-      transID = tempTrans.transactionID;
-      found = 1;
-      dealsAmount++;
-    }	
+
+    if (ans == 'a') {
+      if(tempTrans.renterID == dealRenter.ID && tempTrans.isDone == 0) {
+        found = 1;
+        identifyUser(dealRenter.Email, ans);
+      }	
+    }
+    else if (ans == 'b') {
+      if(tempTrans.ownerID == dealOwner.ID && tempTrans.isDone == 0) {
+        found = 1;
+        identifyUser(dealOwner.Email, ans);
+      }	
+    }
+
   }
   if(found == 0){
     printf("You have no deals made");
@@ -304,7 +295,46 @@ void dealConfirm (void) {
   fclose (fp);
 
   if (found == 1) {
-    printf("\nYou have made a deal with the transaction ID: %d\nDo you wish to rate this deal?", transID);
+    printf("\nYou have made a deal with the transaction ID: %d\nDo you wish to rate this deal?", tempTrans.transactionID);
   }  
 
+  do {
+    scanf("%c", &ans);
+    printf("\n");
+  } while(ans != 'a' && ans != 'b');
+
+}
+
+void identifyUser(char userEmail[], char ans) {
+  FILE *fp;
+  carRenter tempCarRenter;
+  int found = 0;
+
+  // Open renter.dat for reading
+  fp = fopen ("renters.dat", "rb");
+  if (fp == NULL)
+  {
+    fprintf(stderr, "\nError opening file\n");
+    exit (1);
+  }
+
+  // read file contents till end of file
+  while(1){
+    fread(&tempCarRenter, sizeof(tempCarRenter), 1, fp);    
+    if(feof(fp)){
+      break;
+    }
+
+    if(!strcmp(tempCarRenter.Email, userEmail)){
+      found = 1;
+  
+    }	
+  }
+
+  if(found == 0) {
+    printf("Sorry no record found\n");
+  }
+  // close file
+  fclose (fp);    
+  return tempCarRenter;
 }

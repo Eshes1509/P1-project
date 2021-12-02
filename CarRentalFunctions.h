@@ -1,13 +1,15 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
+#include<time.h>
 #include<stdbool.h>
-
-void makeDeal (int renterID, int ownerID);
 
 typedef struct transactionData {
   int transactionID;
   int renterID;
+  char renterEmail[50];
   int ownerID;
+  char ownerEmail[50];
   bool isDone;
 } tranDet;
 
@@ -41,6 +43,24 @@ typedef struct carRenterData {
   // values set by program
   //double  rating[]; // rating of CR
 } carRenter;
+
+void getName (char name[]) {
+
+  char *fullName = (char*) malloc(50);
+
+  /*Checks if memory allocation was sucessfull*/
+  if (fullName == NULL) {
+    printf("Memory allocation failed");
+    exit(0);
+  }
+
+  //Is able to obtain a string including spaces
+  gets(fullName);
+
+  strcpy(name, fullName);
+
+  free(fullName);
+}
 
 //The function that fetches data for a car renter
 carRenter carRenterData(void) {
@@ -242,7 +262,7 @@ carOwner carOwnerDisplay(void){
   return tempCarOwner;
 }
 
-void makeDeal (int renterID, int ownerID) {
+void makeDeal (int renterID, int ownerID, char renterEmail[], char ownerEmail[]) {
 
   FILE *fp;
   tranDet temptrans;
