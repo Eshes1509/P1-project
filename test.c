@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<time.h>
 #include "makeDeal.h"
 
 typedef struct carOwnerData {
@@ -45,8 +46,7 @@ void transactionTest(void);
 
 int main(void) {
   int ans;
-  time_t t;
-  srand(t);
+  srand(time(NULL));
 
   printf("1. Sign in\n2. Sign up as renter\n3. Sign up as owner\n4. Edit car renter\n5. Edit car owner\n6. Display car renter information\n7. Display car owner information\n8. Display all cars\n9. Make a deal\n");
   do{
@@ -108,7 +108,7 @@ carOwner carOwnerData() {
     char name[50];
 
     //ID
-    tempCarOwner.ID = ((rand() % 999999) + 100000);
+    tempCarOwner.ID = ((rand() % 1000000) + 100000);
     // Name
     printf("Please enter your name: ");
     fgets(tempCarOwner.name, 50, stdin);
@@ -179,7 +179,7 @@ carRenter carRenterData() {
     char name[50];
     
     //ID
-    tempCarRenter.ID = ((rand() % 999999) + 100000);
+    tempCarRenter.ID = ((rand() % 1000000) + 100000);
     // Name
     printf("Please enter your name: ");
     fgets(tempCarRenter.name, 50, stdin);
@@ -253,8 +253,8 @@ carRenter carRenterDisplay(){
       }
       if(!strcmp(tempCarRenter.Email, Email)){
         found = 1;
-        printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nPreferred car type: %c\nPreferred transmission type: %c\n",
-        tempCarRenter.name, tempCarRenter.phoneNum, tempCarRenter.Email, tempCarRenter.age, tempCarRenter.postCode, tempCarRenter.prefCarType, tempCarRenter.prefTransmissionType);   
+        printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nPreferred car type: %c\nPreferred transmission type: %c\nID: %d",
+        tempCarRenter.name, tempCarRenter.phoneNum, tempCarRenter.Email, tempCarRenter.age, tempCarRenter.postCode, tempCarRenter.prefCarType, tempCarRenter.prefTransmissionType,tempCarRenter.ID);   
       }	
     }
     if(found == 0){
@@ -289,8 +289,8 @@ carOwner carOwnerDisplay(){
       }
       if(!strcmp(tempCarOwner.Email, Email)){
         found = 1;
-        printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nCar price: %d\nCar name: %s\nModel year: %d\nKilometers driven: %d\nTransmission type: %c\n",
-        tempCarOwner.name, tempCarOwner.phoneNum, tempCarOwner.Email, tempCarOwner.age, tempCarOwner.postCode, tempCarOwner.price, tempCarOwner.carName, tempCarOwner.modelYear, tempCarOwner.odometer, tempCarOwner.transmission);   
+        printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nCar price: %d\nCar name: %s\nModel year: %d\nKilometers driven: %d\nTransmission type: %c\nID: %d",
+        tempCarOwner.name, tempCarOwner.phoneNum, tempCarOwner.Email, tempCarOwner.age, tempCarOwner.postCode, tempCarOwner.price, tempCarOwner.carName, tempCarOwner.modelYear, tempCarOwner.odometer, tempCarOwner.transmission,tempCarOwner.ID);   
       }	
     }
     if(found == 0){
