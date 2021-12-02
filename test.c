@@ -2,6 +2,7 @@
 #include<stdlib.h>
 #include<string.h>
 #include<time.h>
+#include<stdbool.h>
 #include "makeDeal.h"
 
 typedef struct carOwnerData {
@@ -48,7 +49,7 @@ int main(void) {
   int ans;
   srand(time(NULL));
 
-  printf("1. Sign in\n2. Sign up as renter\n3. Sign up as owner\n4. Edit car renter\n5. Edit car owner\n6. Display car renter information\n7. Display car owner information\n8. Display all cars\n9. Make a deal\n");
+  printf("1. Sign in\n2. Sign up as renter\n3. Sign up as owner\n4. Edit car renter\n5. Edit car owner\n6. Display car renter information\n7. Display car owner information\n8. Display all cars\n9. Make a deal\n10. Rate a Deal\n");
   do{
     scanf("%d", &ans);  
   } while(ans < 1 && ans > 9);
@@ -57,24 +58,33 @@ int main(void) {
   {
   case 1: 
     break;
-  case 2: carRenterData();
+  case 2: 
+    carRenterData();
     break;
-  case 3: carOwnerData();
+  case 3: 
+    carOwnerData();
     break;
-  case 4: edit_car_renter();
+  case 4: 
+    edit_car_renter();
     break;
-  case 5: edit_car_owner();
+  case 5: 
+    edit_car_owner();
     break;
-  case 6: carRenterDisplay();
+  case 6: 
+    carRenterDisplay();
     break;
-  case 7: carOwnerDisplay();
+  case 7: 
+    carOwnerDisplay();
     break;
-  case 8: display_all_cars();
+  case 8: 
+    display_all_cars();
     break;
   case 9:
     transactionTest();
     break;
-
+  case 10:
+    ratePerson();
+    break;
   default:
     break;
   }
@@ -470,4 +480,67 @@ void transactionTest (void) {
 
   makeDeal(dealRenter.ID, dealOwner.ID);
 
+}
+
+void ratePerson (void) {
+
+  carOwner    dealOwner;
+  carRenter   dealRenter;
+  FILE*       fp;
+  tranDet     tempTrans;
+  bool        found;
+  char        ans;
+  int         dealsAmount = 0, secondID, transID;
+  
+  printf("Have you rented or rented out a car?\na: rented a car\nb: rented out a car");
+
+  do {
+
+    scanf("%c", &ans);
+
+    printf("\n");
+
+  } while(ans != 'a' && ans != 'b');
+
+  if (ans == 'a') {
+
+    dealRenter = carRenterDisplay();
+  }
+
+  else {
+
+    dealOwner = carOwnerDisplay();
+  }
+
+  fp = fopen ("transactions.dat", "r");
+  if (fp == NULL)
+  {
+    fprintf(stderr, "\nError opening file\n");
+    exit (1);
+  }
+
+  // read file contents till end of file
+  while(1){
+    
+    fread(&tempTrans, sizeof(tempTrans), 1, fp);    
+
+    if(feof(fp)){
+      break;
+    }
+    if(tempTrans.renterID == dealRenter.ID) {
+      secondID = tempTrans.ownerID;
+      transID = tempTrans.transactionID;
+      found = 1;
+      dealsAmount++;
+    }	
+  }
+  if(found == 0){
+    printf("You have no deals made");
+  }
+  // close file
+  fclose (fp);
+
+  if (found == 1) {
+    printf("You have made a deal with the transaction ID: %d\nDo you wish to rate this deal?");
+  }     
 }

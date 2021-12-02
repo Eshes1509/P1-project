@@ -15,7 +15,7 @@ void makeDeal (int renterID, int ownerID) {
   FILE *fp;
   tranDet temptrans;
   
-  temptrans.transactionID = ((rand() % 999999)+100000);
+  temptrans.transactionID = ((rand() % 1000000)+100000);
   temptrans.renterID = renterID;
   temptrans.ownerID = ownerID;
   temptrans.isDone = 0;
@@ -39,4 +39,3 @@ void makeDeal (int renterID, int ownerID) {
   // close file
   fclose (fp);
 }
-
