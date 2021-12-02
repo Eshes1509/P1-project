@@ -1,10 +1,8 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include<OwnerRating.h>
+#include<makeDeal.h>
 #include<transactions.dat>
-time_t t;
-srand(t);
 
 typedef struct carOwnerData {
     // values set by user
@@ -45,13 +43,16 @@ void display_all_cars();
 void edit_car_renter();
 void edit_car_owner();
 
+
 int main(void) {
   int ans;
+  time_t t;
+  srand(t);
 
-  printf("1. Sign in\n2. Sign up as renter\n3. Sign up as owner\n4. Edit car renter\n5. Edit car owner\n6. Display car renter information\n7. Display car owner information\n8. Display all cars\n");
+  printf("1. Sign in\n2. Sign up as renter\n3. Sign up as owner\n4. Edit car renter\n5. Edit car owner\n6. Display car renter information\n7. Display car owner information\n8. Display all cars\n9. Make a deal\n");
   do{
     scanf("%d", &ans);  
-  } while(ans < 1 && ans > 8);
+  } while(ans < 1 && ans > 9);
   
   switch (ans)
   {
@@ -70,6 +71,11 @@ int main(void) {
   case 7: carOwnerDisplay();
     break;
   case 8: display_all_cars();
+    break;
+  case 9:
+    break;
+
+  default:
     break;
   }
 
@@ -451,4 +457,50 @@ void edit_car_owner(){
     }
     fclose(fp);
     fclose(fp1);    
+}
+
+void transactionTest (int renterID, int ownerID) {
+  bool found;
+  FILE *fp, *fp1;
+  carRenter tempCarRenter;
+  carOwner tempCarOwner;
+
+  fp = fopen("owners.dat", "a");
+  fp1 = fopen("renters.dat", "a");
+
+  char *userEmail[] = (char*) malloc(50);
+
+  printf("Please enter your own e-mail:\n");
+  gets(userEmail);
+
+  //check if e-mail is in registry
+  while(1){
+    //Run through first file
+    fread(&userEmail, sizeof(char[50]), 1, fp);    
+    if(feof(fp)) {
+      break;
+    }
+    //Run through second file
+    fread(&userEmail, sizeof(char[50]), 1, fp1);
+    if(feof(fp1)) {
+      break;
+    }
+
+    if(!strcmp(tempCarOwner.Email, userEmail)){
+      found = 1;
+    }	
+    if(!strcmp(tempCarRenter.Email, userEmail)) {
+      found = 1;
+    }
+  }
+
+    if(found == 0){
+      printf("You e-mail is not registrered, please sign up before making a deal");
+    }
+    // close files
+    fclose (fp);
+    flcose (fp1);    
+
+  //check if desired user e-mail is in registry
+
 }
