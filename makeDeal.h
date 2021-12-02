@@ -4,32 +4,31 @@
 
 void makeDeal (int renterID, int ownerID);
 
-FILE *tp;
-
 typedef struct transactionData {
     int transactionID;
     int renterID;
     int ownerID;
-    bool isDone = 0;
+    bool isDone;
 } tranDet;
 
 void makeDeal (int renterID, int ownerID) {
-    
+  FILE *fp;
   tranDet temptrans;
   
   temptrans.transactionID = ((rand() % 999999)+100000);
   temptrans.renterID = renterID;
   temptrans.ownerID = ownerID;
+  temptrans.isDone = 0;
 
   //open file
-  tp = fopen ("transactions.dat", "a");
+  fp = fopen ("transactions.dat", "a");
 
-  if (tp== NULL){
+  if (fp== NULL){
     fprintf(stderr, "\nError opened file\n");
     exit (1);
   }
   
-  fwrite (&temptrans, sizeof(tranDet), 1, tp);
+  fwrite (&temptrans, sizeof(tranDet), 1, fp);
 
   if(fwrite != 0)
     printf("Transaction completed\n");
@@ -38,6 +37,6 @@ void makeDeal (int renterID, int ownerID) {
     printf("Error writing to file !\n");
 
   // close file
-  fclose (tp);
+  fclose (fp);
 }
 

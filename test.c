@@ -1,8 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include<transactions.dat>
-#include<makeDeal.h>
+#include "makeDeal.h"
 
 typedef struct carOwnerData {
     // values set by user
@@ -42,7 +41,7 @@ carRenter carRenterDisplay();
 void display_all_cars();
 void edit_car_renter();
 void edit_car_owner();
-
+void transactionTest(void);
 
 int main(void) {
   int ans;
@@ -73,6 +72,7 @@ int main(void) {
   case 8: display_all_cars();
     break;
   case 9:
+    transactionTest();
     break;
 
   default:
@@ -258,7 +258,7 @@ carRenter carRenterDisplay(){
       }	
     }
     if(found == 0){
-      printf("Sorry no record found");
+      printf("Sorry no record found\n");
     }
     // close file
     fclose (fp);    
@@ -460,13 +460,14 @@ void edit_car_owner(){
 }
 
 //Make deal between an existing car Renter and an existing car owner
-void transactionTest (int renterID, int ownerID) {
-  carOwner    DealOwner;
-  carRenter   DealRenter;
+void transactionTest (void) {
+  carOwner    dealOwner;
+  carRenter   dealRenter;
 
-  DealOwner = carOwnerDisplay();
-  DealRenter = carRenterDisplay();
+  dealOwner = carOwnerDisplay();
+  
+  dealRenter = carRenterDisplay();
 
-  makeDeal(DealRenter.ID, DealOwner.ID);
+  makeDeal(dealRenter.ID, dealOwner.ID);
 
 }
