@@ -16,6 +16,7 @@ void transactionTest(void);
 void dealConfirm(void);
 void getName (char name[]);
 void identifyUser(char userEmail[], char ans);
+
 int main(void) {
   int ans;
   srand(time(NULL));
@@ -274,22 +275,25 @@ void dealConfirm (void) {
       break;
     }
 
-    if (ans == 'a') {
-      if(tempTrans.renterID == dealRenter.ID && tempTrans.isDone == 0) {
-        found = 1;
-        identifyUser(dealRenter.Email, ans);
-      }	
+    if (ans == 'a' && tempTrans.renterID == dealRenter.ID && tempTrans.isDone == 0) {
+    
+      found = 1;
+      identifyUser(dealRenter.Email, ans);
     }
-    else if (ans == 'b') {
-      if(tempTrans.ownerID == dealOwner.ID && tempTrans.isDone == 0) {
-        found = 1;
-        identifyUser(dealOwner.Email, ans);
-      }	
+
+    else if (ans == 'b' && tempTrans.ownerID == dealOwner.ID && tempTrans.isDone == 0) {
+      
+      found = 1;
+      identifyUser(dealOwner.Email, ans);
+    }
+
+    else {
+      printf("\nThe deal has already been rated");
     }
 
   }
   if(found == 0){
-    printf("You have no deals made");
+    printf("\nYou have no deals made");
   }
   // close file
   fclose (fp);
@@ -308,27 +312,47 @@ void dealConfirm (void) {
 void identifyUser(char userEmail[], char ans) {
   FILE *fp;
   carRenter tempCarRenter;
+  carOwner tempCarOwner;
   int found = 0;
 
   // Open renter.dat for reading
-  fp = fopen ("renters.dat", "rb");
-  if (fp == NULL)
-  {
+  if (ans == 'a') {
+    fp = fopen ("renters.dat", "rb");
+  }
+
+  else if (ans == 'b') {
+    fp = fopen("owners.dat", "rb");
+  }
+
+  if (fp == NULL){
     fprintf(stderr, "\nError opening file\n");
     exit (1);
   }
 
   // read file contents till end of file
   while(1){
-    fread(&tempCarRenter, sizeof(tempCarRenter), 1, fp);    
-    if(feof(fp)){
+    if (ans == 'a') {
+      fread(&tempCarRenter, sizeof(tempCarRenter), 1, fp);
+
+      if(!strcmp(tempCarRenter.Email, userEmail)) {
+        found = 1;
+        printf("You made a deal with %s, what you would you to like rate this person?\n1: bad\n2: Not so good\n3: Decent\n4: Good\n5: Very good",tempCarRenter.name);
+      }
+    }
+
+    else if (ans == 'b') {
+      fread(&tempCarOwner, sizeof(tempCarOwner), 1, fp);
+
+      if(!strcmp(tempCarOwner.Email, userEmail)) {
+        found = 1;
+        printf("You made a deal with %s, what you would you to like rate this person?\n1: bad\n2: Not so good\n3: Decent\n4: Good\n5: Very good",tempCarOwner.name);
+      }
+    }
+
+    if(feof(fp)) {
       break;
     }
 
-    if(!strcmp(tempCarRenter.Email, userEmail)){
-      found = 1;
-  
-    }	
   }
 
   if(found == 0) {
@@ -336,5 +360,4 @@ void identifyUser(char userEmail[], char ans) {
   }
   // close file
   fclose (fp);    
-  return tempCarRenter;
 }
