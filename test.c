@@ -52,7 +52,7 @@ int main(void) {
     display_all_cars();
     break;
   case 9:
-    transactionTest();
+    makeDeal();
     break;
   case 10:
     dealConfirm();
@@ -225,21 +225,13 @@ void edit_car_owner(void){
     fclose(fp1);    
 }
 
-//Make deal between an existing car Renter and an existing car owner
-void transactionTest (void) {
-  carOwner    dealOwner;
-  carRenter   dealRenter;
-
-  dealRenter = carRenterDisplay();
-  dealOwner = carOwnerDisplay();
-  
-  makeDeal(dealRenter.ID, dealOwner.ID, dealRenter.Email, dealOwner.Email);
-}
 
 void dealConfirm (void) {
 
   carOwner    dealOwner;
+  carOwner    tempOwner;
   carRenter   dealRenter;
+  carRenter   tempRenter;
   FILE*       fp;
   tranDet     tempTrans;
   bool        found;
@@ -249,7 +241,6 @@ void dealConfirm (void) {
 
   do {
     scanf("%c", &ans);
-    printf("\n");
   } while(ans != 'a' && ans != 'b');
 
   if (ans == 'a') {
@@ -259,9 +250,9 @@ void dealConfirm (void) {
     dealOwner = carOwnerDisplay();
   }
 
-  fp = fopen ("transactions.dat", "r");
-  if (fp == NULL)
-  {
+  fp = fopen ("transactions.dat", "rb");
+
+  if (fp == NULL) {
     fprintf(stderr, "\nError opening file\n");
     exit (1);
   }
@@ -276,44 +267,53 @@ void dealConfirm (void) {
     }
 
     if (ans == 'a' && tempTrans.renterID == dealRenter.ID && tempTrans.isDone == 0) {
-    
+      
       found = 1;
-      identifyUser(dealRenter.Email, ans);
     }
 
     else if (ans == 'b' && tempTrans.ownerID == dealOwner.ID && tempTrans.isDone == 0) {
       
       found = 1;
-      identifyUser(dealOwner.Email, ans);
     }
 
     else {
-      printf("\nThe deal has already been rated");
+      printf("No unrated deals found");
     }
 
   }
-  if(found == 0){
-    printf("\nYou have no deals made");
-  }
+
   // close file
   fclose (fp);
 
   if (found == 1) {
-    printf("\nYou have made a deal with the transaction ID: %d\nDo you wish to rate this deal?", tempTrans.transactionID);
-  }  
-
-  do {
+    printf("\nYou have made a deal with the transaction ID: %d\nDo you wish to rate this deal?\ny: yes\nn: no\n", tempTrans.transactionID);
+    
+    do {
     scanf("%c", &ans);
     printf("\n");
-  } while(ans != 'a' && ans != 'b');
+
+    if (ans == 'a') {
+      identifyUser (dealRenter.Email, ans);
+    }
+
+    else if (ans == 'b') {
+      identifyUser (dealOwner.Email, ans);
+    }
+    
+    } while(ans != 'a' && ans != 'b');
+  }  
+
+  
 
 }
 
 void identifyUser(char userEmail[], char ans) {
   FILE *fp;
+  FILE *fp1;
   carRenter tempCarRenter;
   carOwner tempCarOwner;
   int found = 0;
+  int rate;
 
   // Open renter.dat for reading
   if (ans == 'a') {
@@ -330,34 +330,76 @@ void identifyUser(char userEmail[], char ans) {
   }
 
   // read file contents till end of file
-  while(1){
+  while(1) {
     if (ans == 'a') {
-      fread(&tempCarRenter, sizeof(tempCarRenter), 1, fp);
-
-      if(!strcmp(tempCarRenter.Email, userEmail)) {
-        found = 1;
-        printf("You made a deal with %s, what you would you to like rate this person?\n1: bad\n2: Not so good\n3: Decent\n4: Good\n5: Very good",tempCarRenter.name);
-      }
-    }
-
-    else if (ans == 'b') {
       fread(&tempCarOwner, sizeof(tempCarOwner), 1, fp);
 
       if(!strcmp(tempCarOwner.Email, userEmail)) {
         found = 1;
-        printf("You made a deal with %s, what you would you to like rate this person?\n1: bad\n2: Not so good\n3: Decent\n4: Good\n5: Very good",tempCarOwner.name);
+        fp1 = fopen("temp.dat", "rw");
+
+        if (fp1 == NULL) {
+          fprintf(stderr, "\nError opening file\n");
+          exit (1);
+        }
+
+        printf("You made a deal with %s. What would you like to rate this person?\n1: bad\n2: Not so good\n3: Decent\n4: Good\n5: Very good", tempCarOwner.name);
+        scanf("%c" , &rate);
+
+        tempCarOwner.rating = (double) (tempCarOwner.ratingAmount * tempCarOwner.rating + rate) / (tempCarOwner.ratingAmount + 1);
+        tempCarOwner.ratingAmount++;
+
+        fwrite(&tempCarRenter, sizeof(tempCarRenter), 1, fp1);
+        
+        while(1) {
+          fread(&tempCarRenter, sizeof(tempCarRenter), 1, fp1);
+
+          if(feof(fp1)) {
+            break;
+          }
+
+          fwrite(&tempCarRenter, sizeof(tempCarRenter), 1, fp);
+        } 
+        fclose(fp1);
       }
+      
     }
 
+    if (ans == 'b') {
+      fread(&tempCarRenter, sizeof(tempCarRenter), 1, fp);
+
+      if(!strcmp(tempCarRenter.Email, userEmail)) {
+        found = 1;
+        fp1 = fopen("temp.dat", "rw");
+        printf("You made a deal with %s. What would you like to rate this person?\n1: bad\n2: Not so good\n3: Decent\n4: Good\n5: Very good", tempCarRenter.name);
+        scanf("%c" , &rate);
+
+        tempCarRenter.rating = (double) (tempCarRenter.ratingAmount * tempCarRenter.rating + rate) / (tempCarRenter.ratingAmount + 1);
+        tempCarRenter.ratingAmount++;
+
+        fwrite(&tempCarRenter, sizeof(tempCarRenter), 1, fp1);
+        
+        while(1) {
+          fread(&tempCarRenter, sizeof(tempCarRenter), 1, fp1);
+
+          if(feof(fp1)) {
+            break;
+          }
+
+          fwrite(&tempCarRenter, sizeof(tempCarRenter), 1, fp);
+        } 
+        fclose(fp1);
+      }
+    }
+  
     if(feof(fp)) {
       break;
     }
-
   }
 
   if(found == 0) {
     printf("Sorry no record found\n");
   }
   // close file
-  fclose (fp);    
+  fclose (fp);   
 }

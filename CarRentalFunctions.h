@@ -26,6 +26,8 @@ typedef struct carOwnerData {
   int     modelYear; // Model year of CO's car
   int     odometer; // kilometers driven by CO's car
   char    transmission; // CO's car's transmission | a = auto, b = manual
+  int     rating;
+  int     ratingAmount;
   // values set by program
   //double  rating[]; // rating of CO
 } carOwner;
@@ -39,7 +41,8 @@ typedef struct carRenterData {
   int     postCode; // Postcode of CR
   char    prefCarType; // CR's preffered car type | can be a,b or c, a most expensive, c least expensive
   char    prefTransmissionType; // CR's Preffered transmission type | can be a,b or c, a = auto, b = manual, c = both
-
+  int     rating;
+  int     ratingAmount;
   // values set by program
   //double  rating[]; // rating of CR
 } carRenter;
@@ -100,6 +103,9 @@ carRenter carRenterData(void) {
   printf("Enter preferred transmission type (a = automatic, b = manual,  c = both)): ");
   scanf(" %c", &tempCarRenter.prefTransmissionType);
 
+  //Rating
+  tempCarRenter.rating = 0;
+  tempCarRenter.ratingAmount = 0;
   // open file for writing
   fp = fopen ("renters.dat", "a");
   if (fp == NULL){
@@ -171,6 +177,9 @@ carOwner carOwnerData(void) {
   printf("Enter your car's transmission type (a = automatic, b = manual): ");
   scanf(" %c", &tempCarOwner.transmission);
 
+  tempCarOwner.rating = 0;
+  tempCarOwner.ratingAmount = 0;
+
       // open file for writing
   fp = fopen ("owners.dat", "a");
   if (fp== NULL){
@@ -214,8 +223,8 @@ carRenter carRenterDisplay(void){
     }
     if(!strcmp(tempCarRenter.Email, Email)){
       found = 1;
-      printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nPreferred car type: %c\nPreferred transmission type: %c\nID: %d",
-      tempCarRenter.name, tempCarRenter.phoneNum, tempCarRenter.Email, tempCarRenter.age, tempCarRenter.postCode, tempCarRenter.prefCarType, tempCarRenter.prefTransmissionType,tempCarRenter.ID);   
+      printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nPreferred car type: %c\nPreferred transmission type: %c\nID: %d\nRating: %2.1d(%d ratings)\n",
+      tempCarRenter.name, tempCarRenter.phoneNum, tempCarRenter.Email, tempCarRenter.age, tempCarRenter.postCode, tempCarRenter.prefCarType, tempCarRenter.prefTransmissionType,tempCarRenter.ID, tempCarRenter.rating, tempCarRenter.ratingAmount);   
     }	
   }
   if(found == 0){
@@ -262,31 +271,35 @@ carOwner carOwnerDisplay(void){
   return tempCarOwner;
 }
 
-void makeDeal (int renterID, int ownerID, char renterEmail[], char ownerEmail[]) {
+void makeDeal (void) {
 
-  FILE *fp;
-  tranDet temptrans;
-  
-  temptrans.transactionID = ((rand() % 1000000)+100000);
-  temptrans.renterID = renterID;
-  temptrans.ownerID = ownerID;
-  temptrans.isDone = 0;
-
+  FILE                            *fp;
+  tranDet                         tempTrans;
+  carOwner                        dealOwner;
+  carRenter                       dealRenter;
+  tempTrans.transactionID =       ((rand() % 1000000)+100000);
+  tempTrans.isDone =              0;
+  dealRenter =                    carRenterDisplay();
+  dealOwner =                     carOwnerDisplay();
+  strcpy(tempTrans.renterEmail,   dealRenter.Email);
+  strcpy(tempTrans.ownerEmail,    dealOwner.Email);
   //open file
-  fp = fopen ("transactions.dat", "a");
+  fp = fopen ("transactions.dat", "wb");
 
   if (fp== NULL){
     fprintf(stderr, "\nError opened file\n");
     exit (1);
   }
   
-  fwrite (&temptrans, sizeof(tranDet), 1, fp);
+  fwrite (&tempTrans, sizeof(tempTrans), 1, fp);
 
-  if(fwrite != 0)
+  if(fwrite != 0) {
     printf("Transaction completed\n");
+  }
 
-  else
+  else {
     printf("Error writing to file !\n");
+  }
 
   // close file
   fclose (fp);
