@@ -26,44 +26,90 @@ typedef struct carRenterData {
     int     postCode; // Postcode of CR
     char    prefCarType; // CR's preffered car type | can be a,b or c, a most expensive, c least expensive
     char    prefTransmissionType; // CR's Preffered transmission type | can be a,b or c, a = auto, b = manual, c = both
-
     // values set by program
     //double  rating[]; // rating of CR
 } carRenter;
 
-carOwner carOwnerData();
-carOwner carOwnerDisplay();
 carRenter carRenterData();
-carRenter carRenterDisplay();
-void display_all_cars();
-void edit_car_renter();
-void edit_car_owner();
+carOwner carOwnerData();
+carRenter carRenterDisplay(carRenter carRenter1);
+carOwner carOwnerDisplay(carOwner carOwner1);
+carRenter carRenterEdit(carRenter carRenter1);
+carOwner carOwnerEdit(carOwner carOwner1);
+carRenter carRenterSelect(char Email[]);
+carOwner carOwnerSelect(char Email[]);
+int userSelect(char Email[]);
 
 int main(void) {
-    int ans;
+    int ans = 0;
+    int isRenter = -1;
+    char Email[50];
+    carRenter carRenter1;
+    carOwner carOwner1;
 
-    while(1){
-      printf("1. Sign up as renter\n2. Sign up as owner\n3. Edit car renter\n4. Edit car owner\n5. Display car renter information\n6. Display car owner information\n7. Display all cars\n8. Exit\n");
+    printf("1. Sign in\n2. Sign up\n");
+    do{
+      scanf("%d", &ans);  
+    } while(ans < 1 && ans > 2);
+
+    if(ans == 1){
+      printf("Please enter your email: ");
+      scanf("%s", &Email); 
+
+      do{
+        isRenter = userSelect(Email); 
+      } while(isRenter < 0);
+      
+      if(isRenter == 1){
+        carRenter1 = carRenterSelect(Email);
+        printf("Welcome back %s!\n", carRenter1.name);
+        
+        printf("1. Rent a car\n2. View your profile\n3. Edit your profile\n");
+        do{
+          scanf("%d", &ans);  
+        } while(ans < 1 && ans > 3);
+
+        if(ans == 1){
+
+        }
+        else if(ans == 2){
+          carRenterDisplay(carRenter1);
+        }
+        else if(ans == 3){
+          carRenterEdit(carRenter1);
+        }
+      }
+      else if(isRenter == 0){
+        carOwner1 = carOwnerSelect(Email);
+        printf("Welcome back %s!\n", carOwner1.name);
+
+        printf("1. View your car rental history\n2. View your profile\n3. Edit your profile\n");
+        do{
+          scanf("%d", &ans);  
+        } while(ans < 1 && ans > 3);
+
+        if(ans == 1){
+
+        }
+        else if(ans == 2){
+          carOwnerDisplay(carOwner1);
+        }
+        else if(ans == 3){
+          carOwnerEdit(carOwner1);
+        }
+      }
+    }
+    else if(ans == 2){
+      printf("1. Sign up as renter\n2. Sign up as owner\n");
       do{
         scanf("%d", &ans);  
-      } while(ans < 1 && ans > 8);
-      
-      switch (ans){
-      case 1: carRenterData();
-        break;
-      case 2: carOwnerData();
-        break;
-      case 3: edit_car_renter();
-        break;
-      case 4: edit_car_owner();
-        break;
-      case 5: carRenterDisplay();
-        break;
-      case 6: carOwnerDisplay();
-        break;
-      case 7: display_all_cars();
-        break;
-      case 8: return 0;
+      } while(ans < 1 && ans > 2);      
+
+      if(ans == 1){
+        carRenterData();
+      }
+      else if(ans == 2){
+        carOwnerData();
       }
     }
     return 0;
@@ -71,7 +117,6 @@ int main(void) {
 
 //The function that optains the name of the user and car. Use of dynamic memory allocation. Remember to free(); when done using it
 void getName (char name[]) {
-
     char *fullName = (char*) malloc(50);
 
     /*Checks if memory allocation was sucessfull*/
@@ -86,6 +131,61 @@ void getName (char name[]) {
     strcpy(name, fullName);
 
     free(fullName);
+}
+
+//The function that fetches data for a car renter
+carRenter carRenterData() {
+    FILE *fp;
+    carRenter tempCarRenter;
+    char name[50];
+    
+    // Name
+    printf("Please enter your name: ");
+    fgets(tempCarRenter.name, 50, stdin);
+    getName(name);
+    strcpy(tempCarRenter.name, name);
+
+    // Phonenumber
+    printf("Enter phone number: ");
+    scanf(" %s", &tempCarRenter.phoneNum);
+
+    // Email
+    printf("Enter E-mail: ");
+    scanf(" %s", &tempCarRenter.Email);
+
+    // Age
+    printf("Enter age: ");
+    scanf(" %d", &tempCarRenter.age);
+
+    // Postcode
+    printf("Enter postcode: ");
+    scanf(" %d", &tempCarRenter.postCode);
+
+    // Preffered car type
+    printf("Enter preferred type of car (a: 0 to x kr, b: x+1 to y kr, c: y+1 to z kr): ");
+    scanf(" %c", &tempCarRenter.prefCarType);
+
+    // Preffered transmission type
+    printf("Enter preferred transmission type (a = automatic, b = manual,  c = both)): ");
+    scanf(" %c", &tempCarRenter.prefTransmissionType);
+
+    // open file for writing
+    fp = fopen ("renters.dat", "a");
+    if (fp == NULL){
+      fprintf(stderr, "\nError opened file\n");
+      exit (1);
+    }
+    
+    // write struct to file
+    fwrite (&tempCarRenter, sizeof(tempCarRenter), 1, fp);
+
+    if(fwrite != 0)
+      printf("Account succesfully created !\n");
+    else
+      printf("Error writing to file !\n");
+ 
+    // close file
+    fclose (fp);
 }
 
 //The function that fetches data for a car owner
@@ -157,77 +257,27 @@ carOwner carOwnerData() {
     fclose (fp);
 }
 
-//The function that fetches data for a car renter
-carRenter carRenterData() {
-    FILE *fp;
+int userSelect(char Email[]){
+    FILE *fp, *fp1;
     carRenter tempCarRenter;
-    char name[50];
-    
-    // Name
-    printf("Please enter your name: ");
-    fgets(tempCarRenter.name, 50, stdin);
-    getName(name);
-    strcpy(tempCarRenter.name, name);
-
-    // Phonenumber
-    printf("Enter phone number: ");
-    scanf(" %s", &tempCarRenter.phoneNum);
-
-    // Email
-    printf("Enter E-mail: ");
-    scanf(" %s", &tempCarRenter.Email);
-
-    // Age
-    printf("Enter age: ");
-    scanf(" %d", &tempCarRenter.age);
-
-    // Postcode
-    printf("Enter postcode: ");
-    scanf(" %d", &tempCarRenter.postCode);
-
-    // Preffered car type
-    printf("Enter preferred type of car (a: 0 to x kr, b: x+1 to y kr, c: y+1 to z kr): ");
-    scanf(" %c", &tempCarRenter.prefCarType);
-
-    // Preffered transmission type
-    printf("Enter preferred transmission type (a = automatic, b = manual,  c = both)): ");
-    scanf(" %c", &tempCarRenter.prefTransmissionType);
-
-    // open file for writing
-    fp = fopen ("renters.dat", "a");
-    if (fp == NULL){
-      fprintf(stderr, "\nError opened file\n");
-      exit (1);
-    }
-    
-    // write struct to file
-    fwrite (&tempCarRenter, sizeof(tempCarRenter), 1, fp);
-
-    if(fwrite != 0)
-      printf("Account succesfully created !\n");
-    else
-      printf("Error writing to file !\n");
- 
-    // close file
-    fclose (fp);
-}
-
-carRenter carRenterDisplay(){
-    FILE *fp;
-    carRenter tempCarRenter;
-    char Email[50];
+    carOwner tempCarOwner;
     int found = 0;
-
-    // Open renter.dat for reading
+    
+    // Open renters.dat for reading
     fp = fopen ("renters.dat", "rb");
     if (fp == NULL)
     {
     	fprintf(stderr, "\nError opening file\n");
     	exit (1);
     }
+    // Open owners.dat for reading
+    fp1 = fopen ("owners.dat", "rb");
+    if (fp1 == NULL)
+    {
+    	fprintf(stderr, "\nError opening file\n");
+    	exit (1);
+    }
 
-    printf("Please enter car renter's email: ");
-    scanf("%s", &Email); 
     // read file contents till end of file
     while(1){
       fread(&tempCarRenter, sizeof(tempCarRenter), 1, fp);    
@@ -236,25 +286,73 @@ carRenter carRenterDisplay(){
       }
       if(!strcmp(tempCarRenter.Email, Email)){
         found = 1;
-        printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nPreferred car type: %c\nPreferred transmission type: %c\n",
-        tempCarRenter.name, tempCarRenter.phoneNum, tempCarRenter.Email, tempCarRenter.age, tempCarRenter.postCode, tempCarRenter.prefCarType, tempCarRenter.prefTransmissionType);   
+        fclose(fp);
+        fclose(fp1);
+        return 1;
+      }	
+    }
+
+    while(1){
+      fread(&tempCarOwner, sizeof(tempCarOwner), 1, fp1);    
+      if(feof(fp1)){
+        break;
+      }
+      if(!strcmp(tempCarOwner.Email, Email)){
+        found = 1;
+        fclose(fp);
+        fclose(fp1);        
+        return 0; 
+      }	
+    }    
+
+    if(found == 0){
+      printf("Sorry no record found\n");
+    }
+
+    // close file
+    fclose (fp);   
+    fclose (fp1); 
+    return -1;
+}
+
+carRenter carRenterSelect(char Email[]){
+    FILE *fp;
+    carRenter tempCarRenter;
+    int found = 0;
+
+    // Open renters.dat for reading
+    fp = fopen ("renters.dat", "rb");
+    if (fp == NULL)
+    {
+    	fprintf(stderr, "\nError opening file\n");
+    	exit (1);
+    }
+ 
+    // read file contents till end of file
+    while(1){
+      fread(&tempCarRenter, sizeof(tempCarRenter), 1, fp);    
+      if(feof(fp)){
+        break;
+      }
+      if(!strcmp(tempCarRenter.Email, Email)){
+        found = 1;  
+        break;
       }	
     }
     if(found == 0){
-      printf("Sorry no record found");
+      printf("Sorry no record found\n");
     }
     // close file
     fclose (fp);    
     return tempCarRenter;
 }
 
-carOwner carOwnerDisplay(){
+carOwner carOwnerSelect(char Email[]){
     FILE *fp;
     carOwner tempCarOwner;
-    char Email[50];
     int found = 0;
 
-    // Open owner.dat for reading
+    // Open owners.dat for reading
     fp = fopen ("owners.dat", "rb");
     if (fp == NULL)
     {
@@ -262,8 +360,6 @@ carOwner carOwnerDisplay(){
     	exit (1);
     }
 
-    printf("Please enter car owner's email: ");
-    scanf("%s", &Email); 
     // read file contents till end of file
     while(1){
       fread(&tempCarOwner, sizeof(tempCarOwner), 1, fp);    
@@ -271,58 +367,47 @@ carOwner carOwnerDisplay(){
         break;
       }
       if(!strcmp(tempCarOwner.Email, Email)){
-        found = 1;
-        printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nCar price: %d\nCar name: %s\nModel year: %d\nKilometers driven: %d\nTransmission type: %c\n",
-        tempCarOwner.name, tempCarOwner.phoneNum, tempCarOwner.Email, tempCarOwner.age, tempCarOwner.postCode, tempCarOwner.price, tempCarOwner.carName, tempCarOwner.modelYear, tempCarOwner.odometer, tempCarOwner.transmission);   
+        found = 1; 
+        break; 
       }	
     }
     if(found == 0){
-      printf("Sorry no record found");
+      printf("Sorry no record found\n");
     }
     // close file
     fclose (fp);    
     return tempCarOwner;
 }
 
-void display_all_cars(void){
-    FILE *fp;
-    carOwner tempCarOwner;
-    int n = 1;
+carRenter carRenterDisplay(carRenter carRenter1){
 
-    fp = fopen("owners.dat","rb");
+    printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nPreferred car type: %c\nPreferred transmission type: %c\n",
+    carRenter1.name, carRenter1.phoneNum, carRenter1.Email, carRenter1.age, carRenter1.postCode, carRenter1.prefCarType, carRenter1.prefTransmissionType);   
 
-    while(1){
-      fread(&tempCarOwner, sizeof(tempCarOwner), 1, fp);
-      if(feof(fp)){
-        break;
-      }
-      printf("%d.", n++);
-      printf ("\nCar price: %d dkk per hour\nCar name: %s\nModel year: %d\nKilometers driven: %d\nTransmission type: %c\n",
-      tempCarOwner.price, tempCarOwner.carName, tempCarOwner.modelYear, tempCarOwner.odometer, tempCarOwner.transmission);
-    }
-    fclose(fp);
 }
 
-void edit_car_renter(){
-    FILE *fp;
-    FILE *fp1;
+carOwner carOwnerDisplay(carOwner carOwner1){
+
+    printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nCar price: %d dkk per hour\nCar name: %s\nModel year: %d\nKilometers driven: %d\nTransmission type: %c\n",
+    carOwner1.name, carOwner1.phoneNum, carOwner1.Email, carOwner1.age, carOwner1.postCode, carOwner1.price, carOwner1.carName, carOwner1.modelYear, carOwner1.odometer, carOwner1.transmission);   
+
+}
+
+carRenter carRenterEdit(carRenter carRenter1){
+    FILE *fp, *fp1;
     carRenter tempCarRenter;
-    char Email[50];
     char name[50];
     int found = 0;
 
     fp = fopen("renters.dat","rb");
     fp1 = fopen("temp.dat","wb");
 
-    printf("Enter your email: ");
-    scanf("%s", &Email); 
-
     while(1){
       fread(&tempCarRenter, sizeof(tempCarRenter), 1, fp);
       if(feof(fp)){
         break;
       }
-      if(!strcmp(tempCarRenter.Email, Email)){
+      if(!strcmp(tempCarRenter.Email, carRenter1.Email)){
         found = 1;
         printf("Enter name: ");
         fgets(tempCarRenter.name, 50, stdin);
@@ -369,25 +454,21 @@ void edit_car_renter(){
     fclose(fp1);    
 }
 
-void edit_car_owner(){
+carOwner carOwnerEdit(carOwner carOwner1){
     FILE *fp, *fp1;
     carOwner tempCarOwner;
-    char Email[50];
     char name[50];
     int found = 0;
 
     fp = fopen("owners.dat","rb");
     fp1 = fopen("temp.dat","wb");
 
-    printf("Enter your email: ");
-    scanf("%s", &Email); 
-
     while(1){
       fread(&tempCarOwner, sizeof(tempCarOwner), 1, fp);
       if(feof(fp)){
         break;
       }
-      if(!strcmp(tempCarOwner.Email, Email)){
+      if(!strcmp(tempCarOwner.Email, carOwner1.Email)){
         found = 1;
         printf("Enter name: ");
         fgets(tempCarOwner.name, 50, stdin);
