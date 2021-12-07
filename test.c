@@ -11,6 +11,7 @@ typedef struct carOwnerData {
     int     postCode; // postcode of CO
     int     price; // Price / h (dkk) of CO
     char    carName[50]; // Name of CO's car
+    char    carType;
     int     modelYear; // Model year of CO's car
     int     odometer; // kilometers driven by CO's car
     char    transmission; // CO's car's transmission | a = auto, b = manual
@@ -24,7 +25,7 @@ typedef struct carRenterData {
     char    Email[50]; // Email of CR
     int     age; // Age of CR
     int     postCode; // Postcode of CR
-    char    prefCarType; // CR's preffered car type | can be a,b or c, a most expensive, c least expensive
+    char    prefCarType; // CR's preffered car type | can be a,b or c, a city car/hatchback, b sedan/station car, c SUV/Van
     char    prefTransmissionType; // CR's Preffered transmission type | can be a,b or c, a = auto, b = manual, c = both
 
     // values set by program
@@ -127,6 +128,10 @@ carOwner carOwnerData() {
     getName(name);
     strcpy(tempCarOwner.carName, name);
 
+    // CO's car type
+    printf("What type is your car? (a: city car/hatchback, b: sedan/station car, c: SUV/Van): ");
+    scanf("")
+
     // Model year of CO's car
     printf("Enter your car's model year: ");
     scanf(" %d", &tempCarOwner.modelYear);
@@ -187,7 +192,7 @@ carRenter carRenterData() {
     scanf(" %d", &tempCarRenter.postCode);
 
     // Preffered car type
-    printf("Enter preferred type of car (a: 0 to x kr, b: x+1 to y kr, c: y+1 to z kr): ");
+    printf("Enter preferred type of car (a: city car/hatchback, b: sedan/station car, c: SUV/Van): ");
     scanf(" %c", &tempCarRenter.prefCarType);
 
     // Preffered transmission type
