@@ -11,7 +11,7 @@ typedef struct carOwnerData {
     int     postCode; // postcode of CO
     int     price; // Price / h (dkk) of CO
     char    carName[50]; // Name of CO's car
-    char    carType;
+    char    carType; // Type of CO's car
     int     modelYear; // Model year of CO's car
     int     odometer; // kilometers driven by CO's car
     char    transmission; // CO's car's transmission | a = auto, b = manual
@@ -130,7 +130,7 @@ carOwner carOwnerData() {
 
     // CO's car type
     printf("What type is your car? (a: city car/hatchback, b: sedan/station car, c: SUV/Van): ");
-    scanf("")
+    scanf(" %c", &tempCarOwner.carType);
 
     // Model year of CO's car
     printf("Enter your car's model year: ");
@@ -303,8 +303,8 @@ void display_all_cars(void){
         break;
       }
       printf("%d.", n++);
-      printf ("\nCar price: %d dkk per hour\nCar name: %s\nModel year: %d\nKilometers driven: %d\nTransmission type: %c\n",
-      tempCarOwner.price, tempCarOwner.carName, tempCarOwner.modelYear, tempCarOwner.odometer, tempCarOwner.transmission);
+      printf ("\nCar price: %d dkk per hour\nCar name: %s\nCar type: %c\nModel year: %d\nKilometers driven: %d\nTransmission type: %c\n",
+      tempCarOwner.price, tempCarOwner.carName, tempCarOwner.carType, tempCarOwner.modelYear, tempCarOwner.odometer, tempCarOwner.transmission);
     }
     fclose(fp);
 }
