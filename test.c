@@ -129,8 +129,8 @@ carOwner carOwnerData() {
     strcpy(tempCarOwner.carName, name);
 
     // CO's car type
-    printf("What type is your car? (a: city car/hatchback, b: sedan/station car, c: SUV/Van): ");
-    scanf("")
+    printf("What type is your car? (a: City car/Hatchback, b: Sedan/Station car, c: SUV/Van): ");
+    scanf(" %c", &tempCarOwner.carType);
 
     // Model year of CO's car
     printf("Enter your car's model year: ");
