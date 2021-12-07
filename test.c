@@ -192,7 +192,7 @@ carRenter carRenterData() {
     scanf(" %d", &tempCarRenter.postCode);
 
     // Preffered car type
-    printf("Enter preferred type of car (a: city car/hatchback, b: sedan/station car, c: SUV/Van): ");
+    printf("Enter preferred type of car a, b or c (a: city car/hatchback, b: sedan/station car, c: SUV/Van): ");
     scanf(" %c", &tempCarRenter.prefCarType);
 
     // Preffered transmission type
@@ -278,8 +278,8 @@ carOwner carOwnerDisplay(){
       }
       if(!strcmp(tempCarOwner.Email, Email)){
         found = 1;
-        printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nCar price: %d\nCar name: %s\nModel year: %d\nKilometers driven: %d\nTransmission type: %c\n",
-        tempCarOwner.name, tempCarOwner.phoneNum, tempCarOwner.Email, tempCarOwner.age, tempCarOwner.postCode, tempCarOwner.price, tempCarOwner.carName, tempCarOwner.modelYear, tempCarOwner.odometer, tempCarOwner.transmission);   
+        printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nCar price: %d\nCar name: %s\nCar type: %c\nModel year: %d\nKilometers driven: %d\nTransmission type: %c\n",
+        tempCarOwner.name, tempCarOwner.phoneNum, tempCarOwner.Email, tempCarOwner.age, tempCarOwner.postCode, tempCarOwner.price, tempCarOwner.carName, tempCarOwner.carType, tempCarOwner.modelYear, tempCarOwner.odometer, tempCarOwner.transmission);   
       }	
     }
     if(found == 0){
@@ -342,7 +342,7 @@ void edit_car_renter(){
         scanf(" %d", &tempCarRenter.age);
         printf("Enter postcode: ");
         scanf(" %d", &tempCarRenter.postCode);
-        printf("Enter preferred type of car (a: 0 to x kr, b: x+1 to y kr, c: y+1 to z kr): ");
+        printf("Enter preferred type of car (a: city car/hatchback, b: sedan/station car, c: SUV/Van): ");
         scanf(" %c", &tempCarRenter.prefCarType);
         printf("Enter preferred transmission type (a = automatic, b = manual,  c = both)): ");
         scanf(" %c", &tempCarRenter.prefTransmissionType);
