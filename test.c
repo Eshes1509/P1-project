@@ -14,6 +14,7 @@ typedef struct carOwnerData {
     char    carType; // Type of CO's car (a: city car/hatchback, b: sedan/station car, c: SUV/Van)
     int     modelYear; // Model year of CO's car
     int     odometer; // kilometers driven by CO's car
+    char    CarDescription; // Small description of the Car
     char    transmission; // CO's car's transmission | a = auto, b = manual
     // values set by program
     //double  rating[]; // rating of CO
@@ -143,6 +144,9 @@ carOwner carOwnerData() {
     // CO's car's transmission
     printf("Enter your car's transmission type (a = automatic, b = manual): ");
     scanf(" %c", &tempCarOwner.transmission);
+
+    printf("Please give a small desription of your car:\n ");
+    scanf(" %c", &tempCarOwner.CarDescription);
 
         // open file for writing
     fp = fopen ("owners.dat", "a");
@@ -278,8 +282,8 @@ carOwner carOwnerDisplay(){
       }
       if(!strcmp(tempCarOwner.Email, Email)){
         found = 1;
-        printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nCar price: %d\nCar name: %s\nCar type: %c\nModel year: %d\nKilometers driven: %d\nTransmission type: %c\n",
-        tempCarOwner.name, tempCarOwner.phoneNum, tempCarOwner.Email, tempCarOwner.age, tempCarOwner.postCode, tempCarOwner.price, tempCarOwner.carName, tempCarOwner.carType, tempCarOwner.modelYear, tempCarOwner.odometer, tempCarOwner.transmission);   
+        printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nCar price: %d\nCar name: %s\nCar type: %c\nModel year: %d\nKilometers driven: %d\nTransmission type: %c\nDescription: %c\n",
+        tempCarOwner.name, tempCarOwner.phoneNum, tempCarOwner.Email, tempCarOwner.age, tempCarOwner.postCode, tempCarOwner.price, tempCarOwner.carName, tempCarOwner.carType, tempCarOwner.modelYear, tempCarOwner.odometer, tempCarOwner.transmission, tempCarOwner.CarDescription);   
       }	
     }
     if(found == 0){
