@@ -282,7 +282,7 @@ carOwner carOwnerDisplay(){
       }
       if(!strcmp(tempCarOwner.Email, Email)){
         found = 1;
-        printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nCar price: %d\nCar name: %s\nCar type: %c\nModel year: %d\nKilometers driven: %d\nTransmission type: %c\nDescription: %c\n",
+        printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nCar price: %d\nCar name: %s\nCar type: %c\nModel year: %d\nKilometers driven: %d\nTransmission type: %c\nDescription: %s\n",
         tempCarOwner.name, tempCarOwner.phoneNum, tempCarOwner.Email, tempCarOwner.age, tempCarOwner.postCode, tempCarOwner.price, tempCarOwner.carName, tempCarOwner.carType, tempCarOwner.modelYear, tempCarOwner.odometer, tempCarOwner.transmission, tempCarOwner.CarDescription);   
       }	
     }
