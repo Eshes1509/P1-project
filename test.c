@@ -14,8 +14,8 @@ typedef struct carOwnerData {
     char    carType; // Type of CO's car (a: city car/hatchback, b: sedan/station car, c: SUV/Van)
     int     modelYear; // Model year of CO's car
     int     odometer; // kilometers driven by CO's car
-    char    CarDescription; // Small description of the Car
     char    transmission; // CO's car's transmission | a = auto, b = manual
+    char    CarDescription; // Small description of the Car
     // values set by program
     //double  rating[]; // rating of CO
 } carOwner;
