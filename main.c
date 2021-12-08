@@ -11,6 +11,7 @@ typedef struct carOwnerData {
     int     postCode; // postcode of CO
     int     price; // Price / h (dkk) of CO
     char    carName[50]; // Name of CO's car
+    char    carType; // Type of CO's car (a: city car/hatchback, b: sedan/station car, c: SUV/Van)
     int     modelYear; // Model year of CO's car
     int     odometer; // kilometers driven by CO's car
     char    transmission; // CO's car's transmission | a = auto, b = manual
