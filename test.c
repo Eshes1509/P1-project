@@ -11,9 +11,11 @@ typedef struct carOwnerData {
     int     postCode; // postcode of CO
     int     price; // Price / h (dkk) of CO
     char    carName[50]; // Name of CO's car
+    char    carType; // Type of CO's car (a: city car/hatchback, b: sedan/station car, c: SUV/Van)
     int     modelYear; // Model year of CO's car
     int     odometer; // kilometers driven by CO's car
     char    transmission; // CO's car's transmission | a = auto, b = manual
+    char    CarDescription; // Small description of the Car
     // values set by program
     //double  rating[]; // rating of CO
 } carOwner;
@@ -24,7 +26,7 @@ typedef struct carRenterData {
     char    Email[50]; // Email of CR
     int     age; // Age of CR
     int     postCode; // Postcode of CR
-    char    prefCarType; // CR's preffered car type | can be a,b or c, a most expensive, c least expensive
+    char    prefCarType; // CR's preffered car type (a: city car/hatchback, b: sedan/station car, c: SUV/Van)
     char    prefTransmissionType; // CR's Preffered transmission type | can be a,b or c, a = auto, b = manual, c = both
 
     // values set by program
@@ -38,6 +40,7 @@ carRenter carRenterDisplay();
 void display_all_cars();
 void edit_car_renter();
 void edit_car_owner();
+//void list_of_sorted_cars();
 
 int main(void) {
     int ans;
@@ -126,6 +129,10 @@ carOwner carOwnerData() {
     getName(name);
     strcpy(tempCarOwner.carName, name);
 
+    // CO's car type
+    printf("What type is your car? (a: city car/hatchback, b: sedan/station car, c: SUV/Van): ");
+    scanf(" %c", &tempCarOwner.carType);
+
     // Model year of CO's car
     printf("Enter your car's model year: ");
     scanf(" %d", &tempCarOwner.modelYear);
@@ -137,6 +144,9 @@ carOwner carOwnerData() {
     // CO's car's transmission
     printf("Enter your car's transmission type (a = automatic, b = manual): ");
     scanf(" %c", &tempCarOwner.transmission);
+
+    printf("Please give a small desription of your car:\n ");
+    scanf(" %s", &tempCarOwner.CarDescription);
 
         // open file for writing
     fp = fopen ("owners.dat", "a");
@@ -186,7 +196,7 @@ carRenter carRenterData() {
     scanf(" %d", &tempCarRenter.postCode);
 
     // Preffered car type
-    printf("Enter preferred type of car (a: 0 to x kr, b: x+1 to y kr, c: y+1 to z kr): ");
+    printf("Enter preferred type of car a, b or c (a = city car/hatchback, b = sedan/station car, c = SUV/Van): ");
     scanf(" %c", &tempCarRenter.prefCarType);
 
     // Preffered transmission type
@@ -272,8 +282,8 @@ carOwner carOwnerDisplay(){
       }
       if(!strcmp(tempCarOwner.Email, Email)){
         found = 1;
-        printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nCar price: %d\nCar name: %s\nModel year: %d\nKilometers driven: %d\nTransmission type: %c\n",
-        tempCarOwner.name, tempCarOwner.phoneNum, tempCarOwner.Email, tempCarOwner.age, tempCarOwner.postCode, tempCarOwner.price, tempCarOwner.carName, tempCarOwner.modelYear, tempCarOwner.odometer, tempCarOwner.transmission);   
+        printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nCar price: %d\nCar name: %s\nCar type: %c\nModel year: %d\nKilometers driven: %d\nTransmission type: %c\nDescription: %s\n",
+        tempCarOwner.name, tempCarOwner.phoneNum, tempCarOwner.Email, tempCarOwner.age, tempCarOwner.postCode, tempCarOwner.price, tempCarOwner.carName, tempCarOwner.carType, tempCarOwner.modelYear, tempCarOwner.odometer, tempCarOwner.transmission, tempCarOwner.CarDescription);   
       }	
     }
     if(found == 0){
@@ -297,8 +307,8 @@ void display_all_cars(void){
         break;
       }
       printf("%d.", n++);
-      printf ("\nCar price: %d dkk per hour\nCar name: %s\nModel year: %d\nKilometers driven: %d\nTransmission type: %c\n",
-      tempCarOwner.price, tempCarOwner.carName, tempCarOwner.modelYear, tempCarOwner.odometer, tempCarOwner.transmission);
+      printf ("\nCar price: %d dkk per hour\nCar name: %s\nCar type: %c\nModel year: %d\nKilometers driven: %d\nTransmission type: %c\n",
+      tempCarOwner.price, tempCarOwner.carName, tempCarOwner.carType, tempCarOwner.modelYear, tempCarOwner.odometer, tempCarOwner.transmission);
     }
     fclose(fp);
 }
@@ -336,7 +346,7 @@ void edit_car_renter(){
         scanf(" %d", &tempCarRenter.age);
         printf("Enter postcode: ");
         scanf(" %d", &tempCarRenter.postCode);
-        printf("Enter preferred type of car (a: 0 to x kr, b: x+1 to y kr, c: y+1 to z kr): ");
+        printf("Enter preferred type of car (a = city car/hatchback, b = sedan/station car, c = SUV/Van): ");
         scanf(" %c", &tempCarRenter.prefCarType);
         printf("Enter preferred transmission type (a = automatic, b = manual,  c = both)): ");
         scanf(" %c", &tempCarRenter.prefTransmissionType);
@@ -441,3 +451,14 @@ void edit_car_owner(){
     fclose(fp);
     fclose(fp1);    
 }
+
+/*void list_of_sorted_cars(){
+FILE *fp;
+carOwner tempCarOwner;
+int n = 1;
+
+fp = fopen("owners.dat","rb");
+
+
+
+}*/
