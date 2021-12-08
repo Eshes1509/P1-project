@@ -11,7 +11,6 @@ typedef struct carOwnerData {
     int     postCode; // postcode of CO
     int     price; // Price / h (dkk) of CO
     char    carName[50]; // Name of CO's car
-    char    carType; // Type of CO's car (a: city car/hatchback, b: sedan/station car, c: SUV/Van)
     int     modelYear; // Model year of CO's car
     int     odometer; // kilometers driven by CO's car
     char    transmission; // CO's car's transmission | a = auto, b = manual
@@ -26,7 +25,7 @@ typedef struct carRenterData {
     char    Email[50]; // Email of CR
     int     age; // Age of CR
     int     postCode; // Postcode of CR
-    char    prefCarType; // CR's preffered car type (a: city car/hatchback, b: sedan/station car, c: SUV/Van)
+    char    prefCarType; // CR's preffered car type | can be a,b or c, a most expensive, c least expensive
     char    prefTransmissionType; // CR's Preffered transmission type | can be a,b or c, a = auto, b = manual, c = both
     // values set by program
     //double  rating[]; // rating of CR
@@ -164,7 +163,7 @@ carRenter carRenterData() {
     scanf(" %d", &tempCarRenter.postCode);
 
     // Preffered car type
-    printf("Enter preferred type of car a, b or c (a = city car/hatchback, b = sedan/station car, c = SUV/Van): ");
+    printf("Enter preferred type of car (a: 0 to x kr, b: x+1 to y kr, c: y+1 to z kr): ");
     scanf(" %c", &tempCarRenter.prefCarType);
 
     // Preffered transmission type
@@ -227,10 +226,6 @@ carOwner carOwnerData() {
     fgets(tempCarOwner.carName, 50, stdin);
     getName(name);
     strcpy(tempCarOwner.carName, name);
-
-    // CO's car type
-    printf("What type is your car? (a: city car/hatchback, b: sedan/station car, c: SUV/Van): ");
-    scanf(" %c", &tempCarOwner.carType);
 
     // Model year of CO's car
     printf("Enter your car's model year: ");
@@ -497,14 +492,14 @@ carOwner carOwnerEdit(carOwner carOwner1){
         fgets(tempCarOwner.carName, 50, stdin);
         getName(name);
         strcpy(tempCarOwner.carName, name);
-        printf("What type is your car? (a: city car/hatchback, b: sedan/station car, c: SUV/Van): ");
-        scanf(" %c", &tempCarOwner.carType);
         printf("Enter your car's model year: ");
         scanf(" %d", &tempCarOwner.modelYear);
         printf("Enter your car's mileage: ");
         scanf(" %d", &tempCarOwner.odometer);
         printf("Enter your car's transmission type (a = automatic, b = manual): ");
         scanf(" %c", &tempCarOwner.transmission);
+        printf("Please give a small desription of your car:\n ");
+        scanf(" %s", &tempCarOwner.CarDescription);
         fwrite(&tempCarOwner, sizeof(tempCarOwner), 1, fp1);
       }
       else{
