@@ -492,6 +492,8 @@ carOwner carOwnerEdit(carOwner carOwner1){
         fgets(tempCarOwner.carName, 50, stdin);
         getName(name);
         strcpy(tempCarOwner.carName, name);
+        printf("What type is your car? (a: city car/hatchback, b: sedan/station car, c: SUV/Van): ");
+        scanf(" %c", &tempCarOwner.carType);
         printf("Enter your car's model year: ");
         scanf(" %d", &tempCarOwner.modelYear);
         printf("Enter your car's mileage: ");
