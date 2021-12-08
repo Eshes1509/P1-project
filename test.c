@@ -146,7 +146,7 @@ carOwner carOwnerData() {
     scanf(" %c", &tempCarOwner.transmission);
 
     printf("Please give a small desription of your car:\n ");
-    scanf(" %c", &tempCarOwner.CarDescription);
+    scanf(" %s", &tempCarOwner.CarDescription);
 
         // open file for writing
     fp = fopen ("owners.dat", "a");
