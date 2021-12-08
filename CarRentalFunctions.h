@@ -204,7 +204,7 @@ carRenter carRenterDisplay(void){
   carRenter tempCarRenter;
   char Email[50];
   int found = 0;
-
+  
   // Open renter.dat for reading
   fp = fopen ("renters.dat", "rb");
   if (fp == NULL)
