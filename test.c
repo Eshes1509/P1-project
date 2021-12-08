@@ -40,6 +40,7 @@ carRenter carRenterDisplay();
 void display_all_cars();
 void edit_car_renter();
 void edit_car_owner();
+//void list_of_sorted_cars();
 
 int main(void) {
     int ans;
@@ -451,3 +452,14 @@ void edit_car_owner(){
     fclose(fp);
     fclose(fp1);    
 }
+
+/*void list_of_sorted_cars(){
+FILE *fp;
+carOwner tempCarOwner;
+int n = 1;
+
+fp = fopen("owners.dat","rb");
+
+
+
+}*/
