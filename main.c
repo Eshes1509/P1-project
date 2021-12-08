@@ -43,7 +43,7 @@ carOwner carOwnerSelect(char Email[]);
 int userSelect(char Email[]);
 
 int main(void) {
-    int ans = 0;
+    int answer = 0;
     int isRenter = -1;
     char Email[50];
     carRenter carRenter1;
@@ -51,10 +51,10 @@ int main(void) {
 
     printf("1. Sign in\n2. Sign up\n");
     do{
-      scanf("%d", &ans);  
-    } while(ans < 1 && ans > 2);
+      scanf("%d", &answer);  
+    } while(answer < 1 && answer > 2);
 
-    if(ans == 1){
+    if(answer == 1){
       printf("Please enter your email: ");
       scanf("%s", &Email); 
 
@@ -68,16 +68,16 @@ int main(void) {
         
         printf("1. Rent a car\n2. View your profile\n3. Edit your profile\n");
         do{
-          scanf("%d", &ans);  
-        } while(ans < 1 && ans > 3);
+          scanf("%d", &answer);  
+        } while(answer < 1 && answer > 3);
 
-        if(ans == 1){
+        if(answer == 1){
 
         }
-        else if(ans == 2){
+        else if(answer == 2){
           carRenterDisplay(carRenter1);
         }
-        else if(ans == 3){
+        else if(answer == 3){
           carRenterEdit(carRenter1);
         }
       }
@@ -87,30 +87,30 @@ int main(void) {
 
         printf("1. View your car rental history\n2. View your profile\n3. Edit your profile\n");
         do{
-          scanf("%d", &ans);  
-        } while(ans < 1 && ans > 3);
+          scanf("%d", &answer);  
+        } while(answer < 1 && answer > 3);
 
-        if(ans == 1){
+        if(answer == 1){
 
         }
-        else if(ans == 2){
+        else if(answer == 2){
           carOwnerDisplay(carOwner1);
         }
-        else if(ans == 3){
+        else if(answer == 3){
           carOwnerEdit(carOwner1);
         }
       }
     }
-    else if(ans == 2){
+    else if(answer == 2){
       printf("1. Sign up as renter\n2. Sign up as owner\n");
       do{
-        scanf("%d", &ans);  
-      } while(ans < 1 && ans > 2);      
+        scanf("%d", &answer);  
+      } while(answer < 1 && answer > 2);      
 
-      if(ans == 1){
+      if(answer == 1){
         carRenterData();
       }
-      else if(ans == 2){
+      else if(answer == 2){
         carOwnerData();
       }
     }
