@@ -61,10 +61,11 @@ int main(void) {
     } while(answer < 1 && answer > 2);
 
     if(answer == 1){
-      printf("Please enter your email: ");
-      scanf("%s", &Email); 
 
       do{
+        printf("Please enter your email: ");
+        scanf("%s", &Email); 
+
         isRenter = userSelect(Email); 
       } while(isRenter < 0);
       
@@ -527,7 +528,6 @@ void carSelect(carOwner arrCars[]){
       }
     } while (rent_car != 1);
     
-
     fclose(fp);
 }
 
