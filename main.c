@@ -15,7 +15,7 @@ typedef struct carOwnerData {
     int     modelYear; // Model year of CO's car
     int     odometer; // kilometers driven by CO's car
     char    transmission; // CO's car's transmission | a = auto, b = manual
-    char    CarDescription; // Small description of the car
+    char    CarDescription[100]; // Small description of the car
     // values set by program
     //double  rating[]; // rating of CO
 } carOwner;
@@ -34,6 +34,8 @@ typedef struct carRenterData {
 
 carRenter carRenterData();
 carOwner carOwnerData();
+carRenter enterCarRenter();
+carOwner enterCarOwner();
 carRenter carRenterDisplay(carRenter carRenter1);
 carOwner carOwnerDisplay(carOwner carOwner1);
 carRenter carRenterEdit(carRenter carRenter1);
@@ -41,6 +43,8 @@ carOwner carOwnerEdit(carOwner carOwner1);
 carRenter carRenterSelect(char Email[]);
 carOwner carOwnerSelect(char Email[]);
 int userSelect(char Email[]);
+void carSelect(carOwner arrCars[]);
+int compare_price(const void *v1, const void *v2);
 
 int main(void) {
     int answer = 0;
@@ -48,6 +52,7 @@ int main(void) {
     char Email[50];
     carRenter carRenter1;
     carOwner carOwner1;
+    carOwner arrCars[10];
 
     printf("1. Sign in\n2. Sign up\n");
     do{
@@ -72,7 +77,7 @@ int main(void) {
         } while(answer < 1 && answer > 3);
 
         if(answer == 1){
-
+          carSelect(arrCars);
         }
         else if(answer == 2){
           carRenterDisplay(carRenter1);
@@ -139,37 +144,8 @@ void getName (char name[]) {
 carRenter carRenterData() {
     FILE *fp;
     carRenter tempCarRenter;
-    char name[50];
     
-    // Name
-    printf("Please enter your name: ");
-    fgets(tempCarRenter.name, 50, stdin);
-    getName(name);
-    strcpy(tempCarRenter.name, name);
-
-    // Phonenumber
-    printf("Enter phone number: ");
-    scanf(" %s", &tempCarRenter.phoneNum);
-
-    // Email
-    printf("Enter E-mail: ");
-    scanf(" %s", &tempCarRenter.Email);
-
-    // Age
-    printf("Enter age: ");
-    scanf(" %d", &tempCarRenter.age);
-
-    // Postcode
-    printf("Enter postcode: ");
-    scanf(" %d", &tempCarRenter.postCode);
-
-    // Preffered car type
-    printf("Enter preferred type of car a, b or c (a = city car/hatchback, b = sedan/station car, c = SUV/Van): ");
-    scanf(" %c", &tempCarRenter.prefCarType);
-
-    // Preffered transmission type
-    printf("Enter preferred transmission type (a = automatic, b = manual,  c = both)): ");
-    scanf(" %c", &tempCarRenter.prefTransmissionType);
+    tempCarRenter = enterCarRenter();
 
     // open file for writing
     fp = fopen ("renters.dat", "a");
@@ -194,60 +170,10 @@ carRenter carRenterData() {
 carOwner carOwnerData() {
     FILE *fp;
     carOwner tempCarOwner;
-    char name[50];
 
-    // Name
-    printf("Please enter your name: ");
-    fgets(tempCarOwner.name, 50, stdin);
-    getName(name);
-    strcpy(tempCarOwner.name, name);
+    tempCarOwner = enterCarOwner();
 
-    // Phonenumber
-    printf("Enter phone number: ");
-    scanf(" %s", &tempCarOwner.phoneNum);
-
-    // Email
-    printf("Enter E-mail: ");
-    scanf(" %s", &tempCarOwner.Email);
-
-    // Age
-    printf("Enter age: ");
-    scanf(" %d", &tempCarOwner.age);
-
-    // Postcode
-    printf("Enter postcode: ");
-    scanf(" %d", &tempCarOwner.postCode);
-
-    // Price of CO's car
-    printf("Enter how much your car should cost per hour: ");
-    scanf(" %d", &tempCarOwner.price);
-
-    // CO's car's name
-    printf("Enter name of your car: ");
-    fgets(tempCarOwner.carName, 50, stdin);
-    getName(name);
-    strcpy(tempCarOwner.carName, name);
-
-    // CO's car type
-    printf("What type is your car? (a: city car/hatchback, b: sedan/station car, c: SUV/Van): ");
-    scanf(" %c", &tempCarOwner.carType);
-
-    // Model year of CO's car
-    printf("Enter your car's model year: ");
-    scanf(" %d", &tempCarOwner.modelYear);
-
-    // Kilometers driven by CO's car
-    printf("Enter your car's mileage: ");
-    scanf(" %d", &tempCarOwner.odometer);
-
-    // CO's car's transmission
-    printf("Enter your car's transmission type (a = automatic, b = manual): ");
-    scanf(" %c", &tempCarOwner.transmission);
-
-    printf("Please give a small desription of your car:\n");
-    scanf(" %s", &tempCarOwner.CarDescription);
-
-        // open file for writing
+    // open file for writing
     fp = fopen ("owners.dat", "a");
     if (fp== NULL){
       fprintf(stderr, "\nError opened file\n");
@@ -264,6 +190,64 @@ carOwner carOwnerData() {
  
     // close file
     fclose (fp);
+}
+
+carRenter enterCarRenter(void) {
+    carRenter tempCarRenter;
+    char name[50];
+    printf("Enter name: ");
+    fgets(tempCarRenter.name, 50, stdin);
+    getName(name);
+    strcpy(tempCarRenter.name, name);
+    printf("Enter phone number: ");
+    scanf(" %s", &tempCarRenter.phoneNum);
+    printf("Enter E-mail: ");
+    scanf(" %s", &tempCarRenter.Email);
+    printf("Enter age: ");
+    scanf(" %d", &tempCarRenter.age);
+    printf("Enter postcode: ");
+    scanf(" %d", &tempCarRenter.postCode);
+    printf("Enter preferred type of car (a: city car/hatchback, b: sedan/station car, c: SUV/Van): ");
+    scanf(" %c", &tempCarRenter.prefCarType);
+    printf("Enter preferred transmission type (a = automatic, b = manual,  c = both)): ");
+    scanf(" %c", &tempCarRenter.prefTransmissionType);
+    return tempCarRenter;
+}
+
+carOwner enterCarOwner(void) {
+    carOwner tempCarOwner;
+    char name[50];
+    printf("Enter name: ");
+    fgets(tempCarOwner.name, 50, stdin);
+    getName(name);
+    strcpy(tempCarOwner.name, name);
+    printf("Enter phone number: ");
+    scanf(" %s", &tempCarOwner.phoneNum);
+    printf("Enter E-mail: ");
+    scanf(" %s", &tempCarOwner.Email);
+    printf("Enter age: ");
+    scanf(" %d", &tempCarOwner.age);
+    printf("Enter postcode: ");
+    scanf(" %d", &tempCarOwner.postCode);
+    printf("Enter how much your car should cost per hour: ");
+    scanf(" %d", &tempCarOwner.price);
+    printf("Enter name of your car: ");
+    fgets(tempCarOwner.carName, 50, stdin);
+    getName(name);
+    strcpy(tempCarOwner.carName, name);
+    printf("Enter car type (a: city car/hatchback, b: sedan/station car, c: SUV/Van): ");
+    tempCarOwner.carType = getchar();
+    printf("Enter your car's model year: ");
+    scanf(" %d", &tempCarOwner.modelYear);
+    printf("Enter your car's mileage: ");
+    scanf(" %d", &tempCarOwner.odometer);
+    printf("Enter your car's transmission type (a = automatic, b = manual): ");
+    scanf(" %c", &tempCarOwner.transmission);
+    printf("Enter small description of car: ");
+    fgets(tempCarOwner.CarDescription, 50, stdin);
+    getName(name);
+    strcpy(tempCarOwner.CarDescription, name);
+    return tempCarOwner;
 }
 
 int userSelect(char Email[]){
@@ -405,7 +389,6 @@ carOwner carOwnerDisplay(carOwner carOwner1){
 carRenter carRenterEdit(carRenter carRenter1){
     FILE *fp, *fp1;
     carRenter tempCarRenter;
-    char name[50];
     int found = 0;
 
     fp = fopen("renters.dat","rb");
@@ -418,22 +401,7 @@ carRenter carRenterEdit(carRenter carRenter1){
       }
       if(!strcmp(tempCarRenter.Email, carRenter1.Email)){
         found = 1;
-        printf("Enter name: ");
-        fgets(tempCarRenter.name, 50, stdin);
-        getName(name);
-        strcpy(tempCarRenter.name, name);
-        printf("Enter phone number: ");
-        scanf(" %s", &tempCarRenter.phoneNum);
-        printf("Enter E-mail: ");
-        scanf(" %s", &tempCarRenter.Email);
-        printf("Enter age: ");
-        scanf(" %d", &tempCarRenter.age);
-        printf("Enter postcode: ");
-        scanf(" %d", &tempCarRenter.postCode);
-        printf("Enter preferred type of car (a = city car/hatchback, b = sedan/station car, c = SUV/Van): ");
-        scanf(" %c", &tempCarRenter.prefCarType);
-        printf("Enter preferred transmission type (a = automatic, b = manual,  c = both)): ");
-        scanf(" %c", &tempCarRenter.prefTransmissionType);
+        enterCarRenter();
         fwrite(&tempCarRenter, sizeof(tempCarRenter), 1, fp1);
       }
       else{
@@ -466,7 +434,6 @@ carRenter carRenterEdit(carRenter carRenter1){
 carOwner carOwnerEdit(carOwner carOwner1){
     FILE *fp, *fp1;
     carOwner tempCarOwner;
-    char name[50];
     int found = 0;
 
     fp = fopen("owners.dat","rb");
@@ -479,34 +446,7 @@ carOwner carOwnerEdit(carOwner carOwner1){
       }
       if(!strcmp(tempCarOwner.Email, carOwner1.Email)){
         found = 1;
-        printf("Enter name: ");
-        fgets(tempCarOwner.name, 50, stdin);
-        getName(name);
-        strcpy(tempCarOwner.name, name);
-        printf("Enter phone number: ");
-        scanf(" %s", &tempCarOwner.phoneNum);
-        printf("Enter E-mail: ");
-        scanf(" %s", &tempCarOwner.Email);
-        printf("Enter age: ");
-        scanf(" %d", &tempCarOwner.age);
-        printf("Enter postcode: ");
-        scanf(" %d", &tempCarOwner.postCode);
-        printf("Enter how much your car should cost per hour: ");
-        scanf(" %d", &tempCarOwner.price);
-        printf("Enter name of your car: ");
-        fgets(tempCarOwner.carName, 50, stdin);
-        getName(name);
-        strcpy(tempCarOwner.carName, name);
-        printf("What type is your car? (a: city car/hatchback, b: sedan/station car, c: SUV/Van): ");
-        scanf(" %c", &tempCarOwner.carType);
-        printf("Enter your car's model year: ");
-        scanf(" %d", &tempCarOwner.modelYear);
-        printf("Enter your car's mileage: ");
-        scanf(" %d", &tempCarOwner.odometer);
-        printf("Enter your car's transmission type (a = automatic, b = manual): ");
-        scanf(" %c", &tempCarOwner.transmission);
-        printf("Please give a small desription of your car:\n ");
-        scanf(" %s", &tempCarOwner.CarDescription);
+        tempCarOwner = enterCarOwner();
         fwrite(&tempCarOwner, sizeof(tempCarOwner), 1, fp1);
       }
       else{
@@ -534,4 +474,48 @@ carOwner carOwnerEdit(carOwner carOwner1){
     }
     fclose(fp);
     fclose(fp1);    
+}
+
+void carSelect(carOwner arrCars[]){
+    FILE *fp;
+    carOwner tempCarOwner;
+    int i = 0, number_of_cars, choice;
+
+    fp = fopen ("owners.dat", "rb");
+    if (fp == NULL)
+    {
+    	fprintf(stderr, "\nError opening file\n");
+    	exit (1);
+    }
+
+    while(1){
+      fread(&tempCarOwner, sizeof(tempCarOwner), 1, fp);
+      if(feof(fp)){
+        number_of_cars = i;
+        break;
+      }
+      arrCars[i] = tempCarOwner;
+      i++;
+    }
+    
+    qsort(arrCars, number_of_cars, sizeof(carOwner), compare_price);
+
+    for(i = 0; i < number_of_cars; i++){
+      printf("%d.\n", i + 1);
+      printf("Price: %d\nCar name: %s\nCar type: %c\nModel year: %d\nOdometer: %d\nTransmission type: %c\nCar description: %s\n", 
+      arrCars[i].price, arrCars[i].carName, arrCars[i].carType, arrCars[i].modelYear, arrCars[i].odometer, arrCars[i].transmission, arrCars[i].CarDescription);
+    }
+
+    fclose(fp);
+}
+
+int compare_price(const void *v1, const void *v2){
+    const carOwner *p1 = (carOwner *)v1;
+    const carOwner *p2 = (carOwner *)v2;
+    if (p1->price < p2->price)
+        return -1;
+    else if (p1->price > p2->price)
+        return 1;
+    else
+        return 0;
 }
