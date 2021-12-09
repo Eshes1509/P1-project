@@ -41,7 +41,7 @@ typedef struct carRenterData {
   int     postCode; // Postcode of CR
   char    prefCarType; // CR's preffered car type | can be a,b or c, a most expensive, c least expensive
   char    prefTransmissionType; // CR's Preffered transmission type | can be a,b or c, a = auto, b = manual, c = both
-  int     rating;
+  double  rating;
   int     ratingAmount;
   // values set by program
   //double  rating[]; // rating of CR
@@ -223,7 +223,7 @@ carRenter carRenterDisplay(void){
     }
     if(!strcmp(tempCarRenter.Email, Email)){
       found = 1;
-      printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nPreferred car type: %c\nPreferred transmission type: %c\nID: %d\nRating: %2.1d(%d ratings)\n",
+      printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nPreferred car type: %c\nPreferred transmission type: %c\nID: %d\nRating: %lf(%d ratings)\n",
       tempCarRenter.name, tempCarRenter.phoneNum, tempCarRenter.Email, tempCarRenter.age, tempCarRenter.postCode, tempCarRenter.prefCarType, tempCarRenter.prefTransmissionType,tempCarRenter.ID, tempCarRenter.rating, tempCarRenter.ratingAmount);   
     }	
   }
@@ -259,8 +259,8 @@ carOwner carOwnerDisplay(void){
     }
     if(!strcmp(tempCarOwner.Email, Email)){
       found = 1;
-      printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nCar price: %d\nCar name: %s\nModel year: %d\nKilometers driven: %d\nTransmission type: %c\nID: %d",
-      tempCarOwner.name, tempCarOwner.phoneNum, tempCarOwner.Email, tempCarOwner.age, tempCarOwner.postCode, tempCarOwner.price, tempCarOwner.carName, tempCarOwner.modelYear, tempCarOwner.odometer, tempCarOwner.transmission,tempCarOwner.ID);   
+      printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nCar price: %d\nCar name: %s\nModel year: %d\nKilometers driven: %d\nTransmission type: %c\nID: %d\nRating: %lf (%d Ratings)\n",
+      tempCarOwner.name, tempCarOwner.phoneNum, tempCarOwner.Email, tempCarOwner.age, tempCarOwner.postCode, tempCarOwner.price, tempCarOwner.carName, tempCarOwner.modelYear, tempCarOwner.odometer, tempCarOwner.transmission,tempCarOwner.ID, tempCarOwner.rating, tempCarOwner.ratingAmount);   
     }	
   }
   if(found == 0){
