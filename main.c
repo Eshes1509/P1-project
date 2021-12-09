@@ -44,7 +44,7 @@ carRenter carRenterSelect(char Email[]);
 carOwner carOwnerSelect(char Email[]);
 int userSelect(char Email[]);
 void carSelect(carOwner arrCars[]);
-int compare_price(const void *v1, const void *v2);
+int compare_type_and_price(const void *v1, const void *v2);
 int compare_rating(const void *v1, const void *v2);
 
 int main(void) {
@@ -500,8 +500,8 @@ void carSelect(carOwner arrCars[]){
       i++;
     }
 
-    qsort(arrCars, number_of_cars, sizeof(carOwner), compare_price);
-    
+    qsort(arrCars, number_of_cars, sizeof(carOwner), compare_type_and_price);
+
     do
     {
       for(i = 0; i < number_of_cars; i++){
@@ -531,7 +531,7 @@ void carSelect(carOwner arrCars[]){
     fclose(fp);
 }
 
-int compare_price(const void *v1, const void *v2){ 
+int compare_type_and_price(const void *v1, const void *v2){ 
     const carOwner *p1 = (carOwner *)v1;
     const carOwner *p2 = (carOwner *)v2;
     if (p1->price < p2->price)
