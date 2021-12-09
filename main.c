@@ -534,7 +534,15 @@ void carSelect(carOwner arrCars[]){
 int compare_type_and_price(const void *v1, const void *v2){ 
     const carOwner *p1 = (carOwner *)v1;
     const carOwner *p2 = (carOwner *)v2;
-    if (p1->price < p2->price)
+    if (p1->carType < p2->carType)
+    {
+      return -1;
+    }
+    else if (p1->carType > p2->carType)
+    {
+      return 1;
+    }
+    else if (p1->price < p2->price)
         return -1;
     else if (p1->price > p2->price)
         return 1;
