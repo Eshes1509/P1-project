@@ -495,10 +495,11 @@ void carSelect(carOwner arrCars[]){
         number_of_cars = i;
         break;
       }
+      
       arrCars[i] = tempCarOwner;
       i++;
     }
-    
+
     qsort(arrCars, number_of_cars, sizeof(carOwner), compare_price);
 
     for(i = 0; i < number_of_cars; i++){
