@@ -480,7 +480,7 @@ carOwner carOwnerEdit(carOwner carOwner1){
 void carSelect(carOwner arrCars[]){
     FILE *fp;
     carOwner tempCarOwner;
-    int i = 0, number_of_cars, choice;
+    int i = 0, number_of_cars, choice, rent_car;
 
     fp = fopen ("owners.dat", "rb");
     if (fp == NULL)
@@ -501,20 +501,32 @@ void carSelect(carOwner arrCars[]){
     }
 
     qsort(arrCars, number_of_cars, sizeof(carOwner), compare_price);
-
-    for(i = 0; i < number_of_cars; i++){
-      printf("%d.\n", i + 1);
-      printf("Price: %d\nCar name: %s\nCar type: %c\nModel year: %d\nOdometer: %d\nTransmission type: %c\nCar description: %s\n", 
+    
+    do
+    {
+      for(i = 0; i < number_of_cars; i++){
+      printf("\n%d.", i + 1);
+      printf("\nPrice: %d\nCar name: %s\nCar type: %c\nModel year: %d\nOdometer: %d\nTransmission type: %c\nCar description: %s\n", 
       arrCars[i].price, arrCars[i].carName, arrCars[i].carType, arrCars[i].modelYear, arrCars[i].odometer, arrCars[i].transmission, arrCars[i].CarDescription);
-    }
+      }
 
-    printf("\nChoose which car you would like to rent: ");
-    scanf(" %d", &choice);
+      printf("\nChoose which car you would like to rent: ");
+      scanf(" %d", &choice);
 
-    choice = choice - 1;
+      choice = choice - 1;
 
-    printf("Price: %d\nCar name: %s\nCar type: %c\nModel year: %d\nOdometer: %d\nTransmission type: %c\nCar description: %s\n", 
+      printf("\nPrice: %d\nCar name: %s\nCar type: %c\nModel year: %d\nOdometer: %d\nTransmission type: %c\nCar description: %s\n", 
       arrCars[choice].price, arrCars[choice].carName, arrCars[choice].carType, arrCars[choice].modelYear, arrCars[choice].odometer, arrCars[choice].transmission, arrCars[choice].CarDescription);
+
+      printf("\nWould you like to rent this car? (1 = Yes, 2 = No): ");
+      scanf(" %d", &rent_car);
+
+      if (rent_car == 1)
+      {
+        printf("You successfully chose %s\n", arrCars[choice].carName);
+      }
+    } while (rent_car != 1);
+    
 
     fclose(fp);
 }
