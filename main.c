@@ -508,6 +508,14 @@ void carSelect(carOwner arrCars[]){
       arrCars[i].price, arrCars[i].carName, arrCars[i].carType, arrCars[i].modelYear, arrCars[i].odometer, arrCars[i].transmission, arrCars[i].CarDescription);
     }
 
+    printf("\nChoose which car you would like to rent: ");
+    scanf(" %d", &choice);
+
+    choice = choice - 1;
+
+    printf("Price: %d\nCar name: %s\nCar type: %c\nModel year: %d\nOdometer: %d\nTransmission type: %c\nCar description: %s\n", 
+      arrCars[choice].price, arrCars[choice].carName, arrCars[choice].carType, arrCars[choice].modelYear, arrCars[choice].odometer, arrCars[choice].transmission, arrCars[choice].CarDescription);
+
     fclose(fp);
 }
 
