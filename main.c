@@ -16,6 +16,7 @@ typedef struct carOwnerData {
     int     odometer; // kilometers driven by CO's car
     char    transmission; // CO's car's transmission | a = auto, b = manual
     char    CarDescription[100]; // Small description of the car
+    double  rating; // CO's rating
     // values set by program
     //double  rating[]; // rating of CO
 } carOwner;
@@ -28,6 +29,7 @@ typedef struct carRenterData {
     int     postCode; // Postcode of CR
     char    prefCarType; // CR's preffered car type | can be a,b or c, a most expensive, c least expensive
     char    prefTransmissionType; // CR's Preffered transmission type | can be a,b or c, a = auto, b = manual, c = both
+    double  rating; // CR's Rating
     // values set by program
     //double  rating[]; // rating of CR
 } carRenter;
