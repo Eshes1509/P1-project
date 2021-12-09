@@ -45,6 +45,7 @@ carOwner carOwnerSelect(char Email[]);
 int userSelect(char Email[]);
 void carSelect(carOwner arrCars[]);
 int compare_price(const void *v1, const void *v2);
+int compare_rating(const void *v1, const void *v2);
 
 int main(void) {
     int answer = 0;
@@ -509,12 +510,23 @@ void carSelect(carOwner arrCars[]){
     fclose(fp);
 }
 
-int compare_price(const void *v1, const void *v2){
+int compare_price(const void *v1, const void *v2){ 
     const carOwner *p1 = (carOwner *)v1;
     const carOwner *p2 = (carOwner *)v2;
     if (p1->price < p2->price)
         return -1;
     else if (p1->price > p2->price)
+        return 1;
+    else
+        return 0;
+}
+
+int compare_rating(const void *v1, const void *v2){ 
+    const carOwner *p1 = (carOwner *)v1;
+    const carOwner *p2 = (carOwner *)v2;
+    if (p1->rating < p2->rating)
+        return -1;
+    else if (p1->rating > p2->rating)
         return 1;
     else
         return 0;
