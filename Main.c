@@ -1,63 +1,33 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<time.h>
+#include<stdbool.h>
+#include "CarRentalFunctions.h"
 
-typedef struct carOwnerData {
-    // values set by user
-    int     ID;
-    char    name[50]; // Name of Cor Owner
-    char    phoneNum[9]; // Phone number of CO
-    char    Email[50]; // Email of CO
-    int     age; // age of CO
-    int     postCode; // postcode of CO
-    int     price; // Price / h (dkk) of CO
-    char    carName[50]; // Name of CO's car
-    char    carType; // Type of CO's car (a: city car/hatchback, b: sedan/station car, c: SUV/Van)
-    int     modelYear; // Model year of CO's car
-    int     odometer; // kilometers driven by CO's car
-    char    transmission; // CO's car's transmission | a = auto, b = manual
-    char    CarDescription[100]; // Small description of the car
-    double  rating; // CO's rating
-    int     ratingAmount;
-    // values set by program
-} carOwner;
-
-typedef struct carRenterData {
-    int     ID;
-    char    name[50]; // name of Car Renter
-    char    phoneNum[9]; // Phone number of CR
-    char    Email[50]; // Email of CR
-    int     age; // Age of CR
-    int     postCode; // Postcode of CR
-    char    prefCarType; // CR's preffered car type | can be a,b or c, a most expensive, c least expensive
-    char    prefTransmissionType; // CR's Preffered transmission type | can be a,b or c, a = auto, b = manual, c = both
-    double  rating; // CR's Rating
-    int     ratingAmount;
-    // values set by program
-} carRenter;
-
-carRenter carRenterData();
-carOwner carOwnerData();
-carRenter enterCarRenter();
-carOwner enterCarOwner();
-carRenter carRenterDisplay(carRenter carRenter1);
-carOwner carOwnerDisplay(carOwner carOwner1);
-carRenter carRenterEdit(carRenter carRenter1);
-carOwner carOwnerEdit(carOwner carOwner1);
-carRenter carRenterSelect(char Email[]);
-carOwner carOwnerSelect(char Email[]);
-int userSelect(char Email[]);
-void carSelect(carOwner arrCars[]);
-int compare_type_and_price(const void *v1, const void *v2);
-int compare_rating(const void *v1, const void *v2);
+carRenter     carRenterData();
+carOwner      carOwnerData();
+carRenter     enterCarRenter();
+carOwner      enterCarOwner();
+carRenter     carRenterDisplay(carRenter carRenter1);
+carOwner      carOwnerDisplay(carOwner carOwner1);
+carRenter     carRenterEdit(carRenter carRenter1);
+carOwner      carOwnerEdit(carOwner carOwner1);
+carRenter     carRenterSelect(char Email[]);
+carOwner      carOwnerSelect(char Email[]);
+int           userSelect(char Email[]);
+void          carSelect(carOwner arrCars[]);
+int           compare_type_and_price(const void *v1, const void *v2);
+int           compare_rating(const void *v1, const void *v2);
 
 int main(void) {
     int answer = 0;
     int isRenter = -1;
     char Email[50];
-    carRenter carRenter1;
-    carOwner carOwner1;
+
     carOwner arrCars[10];
+
+    srand(time(NULL));
 
     printf("1. Sign in\n2. Sign up\n");
     do{
@@ -77,38 +47,59 @@ int main(void) {
         carRenter1 = carRenterSelect(Email);
         printf("Welcome back %s!\n", carRenter1.name);
         
-        printf("1. Rent a car\n2. View your profile\n3. Edit your profile\n");
+        printf("1. Rent a car\n2. View your profile\n3. Edit your profile\n4. Rate your latest Rental\n");
         do{
           scanf("%d", &answer);  
-        } while(answer < 1 && answer > 3);
+        } while(answer < 1 && answer > 4);
 
-        if(answer == 1){
-          carSelect(arrCars);
-        }
-        else if(answer == 2){
-          carRenterDisplay(carRenter1);
-        }
-        else if(answer == 3){
-          carRenterEdit(carRenter1);
+        switch (answer) {
+          case 1:
+            carSelect(arrCars);
+            break;
+          
+          case 2:
+            carRenterDisplay(carRenter1);
+            break;
+
+          case 3:
+            carRenterEdit(carRenter1);
+            break;
+          
+          case 4:
+            findTransaction();
+            break;
+          
+          default:
+            break;
         }
       }
-      else if(isRenter == 0){
+      else if(isRenter == 0) {
         carOwner1 = carOwnerSelect(Email);
         printf("Welcome back %s!\n", carOwner1.name);
 
-        printf("1. View your car rental history\n2. View your profile\n3. Edit your profile\n");
+        printf("1. View your car rental history\n2. View your profile\n3. Edit your profile\n4. Rate your latest Rental\n");
         do{
           scanf("%d", &answer);  
-        } while(answer < 1 && answer > 3);
+        } while(answer < 1 && answer > 4);
 
-        if(answer == 1){
+        switch (answer) {
+          case 1:
+            break;
+          
+          case 2:
+            carOwnerDisplay(carOwner1);
+            break;
 
-        }
-        else if(answer == 2){
-          carOwnerDisplay(carOwner1);
-        }
-        else if(answer == 3){
-          carOwnerEdit(carOwner1);
+          case 3:
+            carOwnerEdit(carOwner1);
+            break;
+          
+          case 4:
+            findTransaction();
+            break;
+
+          default:
+            break;
         }
       }
     }
@@ -126,24 +117,6 @@ int main(void) {
       }
     }
     return 0;
-}
-
-//The function that optains the name of the user and car. Use of dynamic memory allocation. Remember to free(); when done using it
-void getName (char name[]) {
-    char *fullName = (char*) malloc(50);
-
-    /*Checks if memory allocation was sucessfull*/
-    if (fullName == NULL) {
-        printf("Memory allocation failed");
-        exit(0);
-    }
-
-    //Is able to obtain a string including spaces
-    gets(fullName);
-
-    strcpy(name, fullName);
-
-    free(fullName);
 }
 
 //The function that fetches data for a car renter
@@ -201,6 +174,8 @@ carOwner carOwnerData() {
 carRenter enterCarRenter(void) {
     carRenter tempCarRenter;
     char name[50];
+    
+    tempCarRenter.ID = ((rand() % 1000000) + 100000);
     printf("Enter name: ");
     fgets(tempCarRenter.name, 50, stdin);
     getName(name);
@@ -217,12 +192,16 @@ carRenter enterCarRenter(void) {
     scanf(" %c", &tempCarRenter.prefCarType);
     printf("Enter preferred transmission type (a = automatic, b = manual,  c = both)): ");
     scanf(" %c", &tempCarRenter.prefTransmissionType);
+    tempCarRenter.rating = 0;
+    tempCarRenter.ratingAmount = 0;
     return tempCarRenter;
 }
 
 carOwner enterCarOwner(void) {
     carOwner tempCarOwner;
     char name[50];
+
+    tempCarOwner.ID = ((rand() % 1000000) + 100000);
     printf("Enter name: ");
     fgets(tempCarOwner.name, 50, stdin);
     getName(name);
@@ -237,6 +216,12 @@ carOwner enterCarOwner(void) {
     scanf(" %d", &tempCarOwner.postCode);
     printf("Enter how much your car should cost per hour: ");
     scanf(" %d", &tempCarOwner.price);
+    
+    while(tempCarOwner.price > 100) {
+      printf("Enter a maximum of 100 dkk");
+      scanf(" %d", &tempCarOwner.price);
+    }
+
     printf("Enter name of your car: ");
     fgets(tempCarOwner.carName, 50, stdin);
     getName(name);
@@ -253,6 +238,8 @@ carOwner enterCarOwner(void) {
     fgets(tempCarOwner.CarDescription, 50, stdin);
     getName(name);
     strcpy(tempCarOwner.CarDescription, name);
+    tempCarOwner.rating = 0;
+    tempCarOwner.ratingAmount = 0;
     return tempCarOwner;
 }
 
@@ -285,6 +272,7 @@ int userSelect(char Email[]){
       }
       if(!strcmp(tempCarRenter.Email, Email)){
         found = 1;
+        RenterLoggedIn = 1;
         fclose(fp);
         fclose(fp1);
         return 1;
@@ -298,6 +286,7 @@ int userSelect(char Email[]){
       }
       if(!strcmp(tempCarOwner.Email, Email)){
         found = 1;
+        OwnerLoggedIn = 1;
         fclose(fp);
         fclose(fp1);        
         return 0; 
@@ -380,15 +369,15 @@ carOwner carOwnerSelect(char Email[]){
 
 carRenter carRenterDisplay(carRenter carRenter1){
 
-    printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nPreferred car type: %c\nPreferred transmission type: %c\n",
-    carRenter1.name, carRenter1.phoneNum, carRenter1.Email, carRenter1.age, carRenter1.postCode, carRenter1.prefCarType, carRenter1.prefTransmissionType);   
+    printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nPreferred car type: %c\nPreferred transmission type: %c\nRating: %0.2lf (%d Ratings)\n",
+    carRenter1.name, carRenter1.phoneNum, carRenter1.Email, carRenter1.age, carRenter1.postCode, carRenter1.prefCarType, carRenter1.prefTransmissionType, carRenter1.rating, carRenter1.ratingAmount);   
 
 }
 
 carOwner carOwnerDisplay(carOwner carOwner1){
 
-    printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nCar price: %d dkk per hour\nCar name: %s\nModel year: %d\nKilometers driven: %d\nTransmission type: %c\nDescription: %s",
-    carOwner1.name, carOwner1.phoneNum, carOwner1.Email, carOwner1.age, carOwner1.postCode, carOwner1.price, carOwner1.carName, carOwner1.modelYear, carOwner1.odometer, carOwner1.transmission, carOwner1.CarDescription);   
+  printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nCar price: %d dkk per hour\nCar name: %s\nModel year: %d\nKilometers driven: %d\nTransmission type: %c\nDescription: %s\nRating: %0.2lf (%d ratings)",
+  carOwner1.name, carOwner1.phoneNum, carOwner1.Email, carOwner1.age, carOwner1.postCode, carOwner1.price, carOwner1.carName, carOwner1.modelYear, carOwner1.odometer, carOwner1.transmission, carOwner1.CarDescription, carOwner1.rating, carOwner1.ratingAmount);   
 
 }
 
@@ -510,9 +499,9 @@ void carSelect(carOwner arrCars[]){
     do
     {
       for(i = 0; i < number_of_cars; i++){
-      printf("\n%d.", i + 1);
-      printf("\nPrice: %d\nCar name: %s\nCar type: %c\nModel year: %d\nOdometer: %d\nTransmission type: %c\nCar description: %s\n", 
-      arrCars[i].price, arrCars[i].carName, arrCars[i].carType, arrCars[i].modelYear, arrCars[i].odometer, arrCars[i].transmission, arrCars[i].CarDescription);
+        printf("\n%d.", i + 1);
+        printf("\nPrice: %d\nCar name: %s\nCar type: %c\nModel year: %d\nOdometer: %d\nTransmission type: %c\nCar description: %s\n", 
+        arrCars[i].price, arrCars[i].carName, arrCars[i].carType, arrCars[i].modelYear, arrCars[i].odometer, arrCars[i].transmission, arrCars[i].CarDescription);
       }
 
       printf("\nChoose which car you would like to rent: ");
@@ -529,6 +518,7 @@ void carSelect(carOwner arrCars[]){
       if (rent_car == 1)
       {
         printf("You successfully chose %s\n", arrCars[choice].carName);
+        makeDeal(arrCars[choice]);
       }
     } while (rent_car != 1);
     
