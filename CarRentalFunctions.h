@@ -47,24 +47,6 @@ typedef struct carRenterData {
   //double  rating[]; // rating of CR
 } carRenter;
 
-void getName (char name[]) {
-
-  char *fullName = (char*) malloc(50);
-
-  /*Checks if memory allocation was sucessfull*/
-  if (fullName == NULL) {
-    printf("Memory allocation failed");
-    exit(0);
-  }
-
-  //Is able to obtain a string including spaces
-  gets(fullName);
-
-  strcpy(name, fullName);
-
-  free(fullName);
-}
-
 //The function that fetches data for a car renter
 carRenter carRenterData(void) {
   FILE *fp;
