@@ -172,75 +172,79 @@ carOwner carOwnerData() {
 }
 
 carRenter enterCarRenter(void) {
-    carRenter tempCarRenter;
-    char name[50];
-    
-    tempCarRenter.ID = ((rand() % 1000000) + 100000);
-    printf("Enter name: ");
-    fgets(tempCarRenter.name, 50, stdin);
-    getName(name);
-    strcpy(tempCarRenter.name, name);
-    printf("Enter phone number: ");
-    scanf(" %s", &tempCarRenter.phoneNum);
-    printf("Enter E-mail: ");
-    scanf(" %s", &tempCarRenter.Email);
-    printf("Enter age: ");
-    scanf(" %d", &tempCarRenter.age);
-    printf("Enter postcode: ");
-    scanf(" %d", &tempCarRenter.postCode);
-    printf("Enter preferred type of car (a: city car/hatchback, b: sedan/station car, c: SUV/Van): ");
-    scanf(" %c", &tempCarRenter.prefCarType);
-    printf("Enter preferred transmission type (a = automatic, b = manual,  c = both)): ");
-    scanf(" %c", &tempCarRenter.prefTransmissionType);
-    tempCarRenter.rating = 0;
-    tempCarRenter.ratingAmount = 0;
-    return tempCarRenter;
+  carRenter tempCarRenter;
+  char name[50];
+  
+  tempCarRenter.ID = ((rand() % 1000000) + 100000);
+  printf("Enter name: ");
+  fgets(tempCarRenter.name, 50, stdin);
+  getName(name);
+  strcpy(tempCarRenter.name, name);
+  printf("Enter phone number: ");
+  scanf(" %s", &tempCarRenter.phoneNum);
+  printf("Enter E-mail: ");
+  scanf(" %s", &tempCarRenter.Email);
+  printf("Enter age: ");
+  scanf(" %d", &tempCarRenter.age);
+  printf("Enter postcode: ");
+  do {
+    scanf("\n%d", &tempCarRenter.postCode);
+  } while(tempCarRenter.postCode != 9000 && tempCarRenter.postCode != 9200 && tempCarRenter.postCode != 9210 && tempCarRenter.postCode != 9220);
+  printf("Enter preferred type of car (a: city car/hatchback, b: sedan/station car, c: SUV/Van): ");
+  scanf(" %c", &tempCarRenter.prefCarType);
+  printf("Enter preferred transmission type (a = automatic, b = manual,  c = both)): ");
+  scanf(" %c", &tempCarRenter.prefTransmissionType);
+  tempCarRenter.rating = 0;
+  tempCarRenter.ratingAmount = 0;
+  return tempCarRenter;
 }
 
 carOwner enterCarOwner(void) {
-    carOwner tempCarOwner;
-    char name[50];
+  carOwner tempCarOwner;
+  char name[50];
 
-    tempCarOwner.ID = ((rand() % 1000000) + 100000);
-    printf("Enter name: ");
-    fgets(tempCarOwner.name, 50, stdin);
-    getName(name);
-    strcpy(tempCarOwner.name, name);
-    printf("Enter phone number: ");
-    scanf(" %s", &tempCarOwner.phoneNum);
-    printf("Enter E-mail: ");
-    scanf(" %s", &tempCarOwner.Email);
-    printf("Enter age: ");
-    scanf(" %d", &tempCarOwner.age);
-    printf("Enter postcode: ");
-    scanf(" %d", &tempCarOwner.postCode);
-    printf("Enter how much your car should cost per hour: ");
+  tempCarOwner.ID = ((rand() % 1000000) + 100000);
+  printf("Enter name: ");
+  fgets(tempCarOwner.name, 50, stdin);
+  getName(name);
+  strcpy(tempCarOwner.name, name);
+  printf("Enter phone number: ");
+  scanf(" %s", &tempCarOwner.phoneNum);
+  printf("Enter E-mail: ");
+  scanf(" %s", &tempCarOwner.Email);
+  printf("Enter age: ");
+  scanf(" %d", &tempCarOwner.age);
+  printf("Enter postcode: ");
+  do {
+    scanf("\n%d", &tempCarOwner.postCode);
+  } while(tempCarOwner.postCode != 9000 && tempCarOwner.postCode != 9200 && tempCarOwner.postCode != 9210 && tempCarOwner.postCode != 9220);
+  printf("Enter how much your car should cost per hour: ");
+  scanf(" %d", &tempCarOwner.price);
+  
+  while(tempCarOwner.price > 100) {
+    printf("\nEnter a maximum of 100 dkk: ");
     scanf(" %d", &tempCarOwner.price);
-    
-    while(tempCarOwner.price > 100) {
-      printf("Enter a maximum of 100 dkk");
-      scanf(" %d", &tempCarOwner.price);
-    }
+  }
 
-    printf("Enter name of your car: ");
-    fgets(tempCarOwner.carName, 50, stdin);
-    getName(name);
-    strcpy(tempCarOwner.carName, name);
-    printf("Enter car type (a: city car/hatchback, b: sedan/station car, c: SUV/Van): ");
-    tempCarOwner.carType = getchar();
-    printf("Enter your car's model year: ");
-    scanf(" %d", &tempCarOwner.modelYear);
-    printf("Enter your car's mileage: ");
-    scanf(" %d", &tempCarOwner.odometer);
-    printf("Enter your car's transmission type (a = automatic, b = manual): ");
-    scanf(" %c", &tempCarOwner.transmission);
-    printf("Enter small description of car: ");
-    fgets(tempCarOwner.CarDescription, 50, stdin);
-    getName(name);
-    strcpy(tempCarOwner.CarDescription, name);
-    tempCarOwner.rating = 0;
-    tempCarOwner.ratingAmount = 0;
-    return tempCarOwner;
+  printf("Enter name of your car: ");
+  fgets(tempCarOwner.carName, 50, stdin);
+  getName(name);
+  strcpy(tempCarOwner.carName, name);
+  printf("Enter car type (a: city car/hatchback, b: sedan/station car, c: SUV/Van): ");
+  tempCarOwner.carType = getchar();
+  printf("Enter your car's model year: ");
+  scanf(" %d", &tempCarOwner.modelYear);
+  printf("Enter your car's mileage: ");
+  scanf(" %d", &tempCarOwner.odometer);
+  printf("Enter your car's transmission type (a = automatic, b = manual): ");
+  scanf(" %c", &tempCarOwner.transmission);
+  printf("Enter small description of car: ");
+  fgets(tempCarOwner.CarDescription, 50, stdin);
+  getName(name);
+  strcpy(tempCarOwner.CarDescription, name);
+  tempCarOwner.rating = 0;
+  tempCarOwner.ratingAmount = 0;
+  return tempCarOwner;
 }
 
 int userSelect(char Email[]){

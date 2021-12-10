@@ -4,8 +4,6 @@
 #include<time.h>
 #include<stdbool.h>
 
-
-
 typedef struct transactionData {
   int     transactionID;
   int     renterID;
@@ -121,7 +119,7 @@ void makeDeal (carOwner tempCarOwner) {
   fclose (fp);
 }
 
-void editTransaction (int transID, carOwner tempCarOwner) {
+void editTransaction (int transID) {
 
   FILE *fp;
   FILE *fp1;
@@ -132,7 +130,7 @@ void editTransaction (int transID, carOwner tempCarOwner) {
 
     fp = fopen("transactions.dat", "rb");
     fp1 = fopen("temp.dat", "wb");
-
+    
     while (1) {
       fread(&tempTrans, sizeof(tempTrans), 1, fp);
       
@@ -141,18 +139,18 @@ void editTransaction (int transID, carOwner tempCarOwner) {
       }
 
       if (!strcmp(tempTrans.renterEmail , carRenter1.Email)) {
-        pos = ftell(fp);
+        //pos = ftell(fp);
         tempTrans.renterRated = 1;
 
         fwrite(&tempTrans, sizeof(tempTrans), 1, fp1);
       }
     }
-
+  
     //closing files and opening in reversed modes
     fclose(fp);
     fclose(fp1);
-    fp = fopen("transactions.dat", "wb");
-    fseek(fp, pos, SEEK_SET);
+    fp = fopen("transactions.dat", "rb+");
+    //fseek(fp, pos, SEEK_SET);
     fp1 = fopen("temp.dat", "rb");
     
     while (1) {
@@ -166,6 +164,9 @@ void editTransaction (int transID, carOwner tempCarOwner) {
         fwrite(&tempTrans, sizeof(tempTrans), 1, fp);
       }
     }
+    
+    fclose(fp);
+    fclose(fp1);
   }
 
   else if (OwnerLoggedIn == 1) {
@@ -179,7 +180,7 @@ void editTransaction (int transID, carOwner tempCarOwner) {
         break;
       }
 
-      if (!strcmp(tempTrans.ownerEmail , tempCarOwner.Email)) {
+      if (!strcmp(tempTrans.ownerEmail , carOwner1.Email)) {
         pos = ftell(fp);
         tempTrans.ownerRated = 1;
         fwrite(&tempTrans, sizeof(tempTrans), 1, fp1);
@@ -189,7 +190,7 @@ void editTransaction (int transID, carOwner tempCarOwner) {
     //closing files and opening in reversed modes
     fclose(fp);
     fclose(fp1);
-    fp = fopen("transactions.dat", "wb");
+    fp = fopen("transactions.dat", "rb+");
     fseek(fp, pos, SEEK_SET);
     fp1 = fopen("temp.dat", "rb");
     
@@ -199,14 +200,13 @@ void editTransaction (int transID, carOwner tempCarOwner) {
       if (feof(fp)) {
         break;
       }
-      if (!strcmp(tempTrans.ownerEmail, tempCarOwner.Email)) {
+      if (!strcmp(tempTrans.ownerEmail, carOwner1.Email)) {
         
         fwrite(&tempTrans, sizeof(tempTrans), 1, fp);
       }
     }
-
-
-
+    fclose(fp);
+    fclose(fp1);
   }
 }
 //Function that enables a user to rate another, if they have had a deal with them
@@ -215,7 +215,7 @@ void userRating(char userEmail[], char ans, tranDet tempTrans) {
   FILE      *fp;
   FILE      *fp1;
   carRenter tempCarRenter;
-  carOwner tempCarOwner;
+  carOwner  tempCarOwner;
   int found = 0;
   double rate;
   long int pos;
@@ -257,7 +257,7 @@ void userRating(char userEmail[], char ans, tranDet tempTrans) {
 
         fwrite(&tempCarOwner, sizeof(tempCarOwner), 1, fp1);
 
-        editTransaction(tempTrans.transactionID, tempCarOwner);
+        editTransaction(tempTrans.transactionID);
       }
     }
     fclose(fp);
@@ -296,7 +296,7 @@ void userRating(char userEmail[], char ans, tranDet tempTrans) {
 
         fwrite(&tempCarRenter, sizeof(tempCarRenter), 1, fp1);
 
-        //Insert transaction editing function
+        editTransaction(tempTrans.transactionID);
       }
     }
     fclose(fp);
@@ -361,6 +361,7 @@ void findTransaction (void) {
   carRenter   tempRenter;
   FILE*       fp;
   tranDet     tempTrans;
+  tranDet     foundTrans;
   bool        found;
   char        ans;
   char        ans2;
@@ -392,11 +393,13 @@ void findTransaction (void) {
     if (ans == 'a' && (!strcmp(tempTrans.renterEmail , carRenter1.Email)) && tempTrans.renterRated == 0) {
      
       found = 1;
+      foundTrans = tempTrans;
     }
 
     else if (ans == 'b' && (!strcmp(tempTrans.ownerEmail , carOwner1.Email)) && tempTrans.ownerRated == 0) {
       
       found = 1;
+      foundTrans = tempTrans;
     }
 
     else {
@@ -412,11 +415,11 @@ void findTransaction (void) {
     fflush(stdin);
     if (RenterLoggedIn = 1) {
       printf("\nYou have made a deal with the transaction details:\nID: %d\nCounter Part Name: %s\nCounter Part Email: %s\nCar name: %s\nDo you wish to rate this deal?\ny: yes\nn: no\n", 
-      tempTrans.transactionID, tempTrans.ownerName, tempTrans.ownerEmail, tempTrans.carName);
+      foundTrans.transactionID, foundTrans.ownerName, foundTrans.ownerEmail, foundTrans.carName);
     }
     else if(OwnerLoggedIn = 1) {
       printf("\nYou have made a deal with the transaction details:\nID: %d\nCounter Part Name: %s\nCounter Part Email: %s\nDo you wish to rate this deal?\ny: yes\nn: no\n", 
-      tempTrans.transactionID, tempTrans.renterName, tempTrans.renterEmail);
+      foundTrans.transactionID, foundTrans.renterName, foundTrans.renterEmail);
     }
     do {
 
@@ -424,11 +427,11 @@ void findTransaction (void) {
     printf("\n");
 
     if (ans == 'a' && ans2 == 'y') {
-      userRating (tempTrans.ownerEmail, ans, tempTrans);
+      userRating (foundTrans.ownerEmail, ans, foundTrans);
     }
 
     else if (ans == 'b' && ans2 == 'y') {
-      userRating (tempTrans.renterEmail, ans, tempTrans);
+      userRating (foundTrans.renterEmail, ans, foundTrans);
     }
 
     else if (ans2 == 'n') {
