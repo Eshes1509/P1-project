@@ -4,6 +4,7 @@
 
 typedef struct carOwnerData {
     // values set by user
+    int     ID;
     char    name[50]; // Name of Cor Owner
     char    phoneNum[9]; // Phone number of CO
     char    Email[50]; // Email of CO
@@ -16,11 +17,13 @@ typedef struct carOwnerData {
     int     odometer; // kilometers driven by CO's car
     char    transmission; // CO's car's transmission | a = auto, b = manual
     char    CarDescription[100]; // Small description of the car
-    double  rating[]; // CO's rating
+    double  rating; // CO's rating
+    int     ratingAmount;
     // values set by program
 } carOwner;
 
 typedef struct carRenterData {
+    int     ID;
     char    name[50]; // name of Car Renter
     char    phoneNum[9]; // Phone number of CR
     char    Email[50]; // Email of CR
@@ -28,7 +31,8 @@ typedef struct carRenterData {
     int     postCode; // Postcode of CR
     char    prefCarType; // CR's preffered car type | can be a,b or c, a most expensive, c least expensive
     char    prefTransmissionType; // CR's Preffered transmission type | can be a,b or c, a = auto, b = manual, c = both
-    double  rating[]; // CR's Rating
+    double  rating; // CR's Rating
+    int     ratingAmount;
     // values set by program
 } carRenter;
 
