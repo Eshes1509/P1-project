@@ -16,8 +16,8 @@ typedef struct carOwnerData {
     int     odometer; // kilometers driven by CO's car
     char    transmission; // CO's car's transmission | a = auto, b = manual
     char    CarDescription[100]; // Small description of the car
+    double  rating[]; // CO's rating
     // values set by program
-    //double  rating[]; // rating of CO
 } carOwner;
 
 typedef struct carRenterData {
@@ -28,8 +28,8 @@ typedef struct carRenterData {
     int     postCode; // Postcode of CR
     char    prefCarType; // CR's preffered car type | can be a,b or c, a most expensive, c least expensive
     char    prefTransmissionType; // CR's Preffered transmission type | can be a,b or c, a = auto, b = manual, c = both
+    double  rating[]; // CR's Rating
     // values set by program
-    //double  rating[]; // rating of CR
 } carRenter;
 
 carRenter carRenterData();
@@ -44,7 +44,8 @@ carRenter carRenterSelect(char Email[]);
 carOwner carOwnerSelect(char Email[]);
 int userSelect(char Email[]);
 void carSelect(carOwner arrCars[]);
-int compare_price(const void *v1, const void *v2);
+int compare_type_and_price(const void *v1, const void *v2);
+int compare_rating(const void *v1, const void *v2);
 
 int main(void) {
     int answer = 0;
@@ -60,10 +61,11 @@ int main(void) {
     } while(answer < 1 && answer > 2);
 
     if(answer == 1){
-      printf("Please enter your email: ");
-      scanf("%s", &Email); 
 
       do{
+        printf("Please enter your email: ");
+        scanf("%s", &Email); 
+
         isRenter = userSelect(Email); 
       } while(isRenter < 0);
       
@@ -479,7 +481,7 @@ carOwner carOwnerEdit(carOwner carOwner1){
 void carSelect(carOwner arrCars[]){
     FILE *fp;
     carOwner tempCarOwner;
-    int i = 0, number_of_cars, choice;
+    int i = 0, number_of_cars, choice, rent_car;
 
     fp = fopen ("owners.dat", "rb");
     if (fp == NULL)
@@ -494,27 +496,66 @@ void carSelect(carOwner arrCars[]){
         number_of_cars = i;
         break;
       }
+      
       arrCars[i] = tempCarOwner;
       i++;
     }
-    
-    qsort(arrCars, number_of_cars, sizeof(carOwner), compare_price);
 
-    for(i = 0; i < number_of_cars; i++){
-      printf("%d.\n", i + 1);
-      printf("Price: %d\nCar name: %s\nCar type: %c\nModel year: %d\nOdometer: %d\nTransmission type: %c\nCar description: %s\n", 
+    qsort(arrCars, number_of_cars, sizeof(carOwner), compare_type_and_price);
+
+    do
+    {
+      for(i = 0; i < number_of_cars; i++){
+      printf("\n%d.", i + 1);
+      printf("\nPrice: %d\nCar name: %s\nCar type: %c\nModel year: %d\nOdometer: %d\nTransmission type: %c\nCar description: %s\n", 
       arrCars[i].price, arrCars[i].carName, arrCars[i].carType, arrCars[i].modelYear, arrCars[i].odometer, arrCars[i].transmission, arrCars[i].CarDescription);
-    }
+      }
 
+      printf("\nChoose which car you would like to rent: ");
+      scanf(" %d", &choice);
+
+      choice = choice - 1;
+
+      printf("\nPrice: %d\nCar name: %s\nCar type: %c\nModel year: %d\nOdometer: %d\nTransmission type: %c\nCar description: %s\n", 
+      arrCars[choice].price, arrCars[choice].carName, arrCars[choice].carType, arrCars[choice].modelYear, arrCars[choice].odometer, arrCars[choice].transmission, arrCars[choice].CarDescription);
+
+      printf("\nWould you like to rent this car? (1 = Yes, 2 = No): ");
+      scanf(" %d", &rent_car);
+
+      if (rent_car == 1)
+      {
+        printf("You successfully chose %s\n", arrCars[choice].carName);
+      }
+    } while (rent_car != 1);
+    
     fclose(fp);
 }
 
-int compare_price(const void *v1, const void *v2){
+int compare_type_and_price(const void *v1, const void *v2){ 
     const carOwner *p1 = (carOwner *)v1;
     const carOwner *p2 = (carOwner *)v2;
-    if (p1->price < p2->price)
+    if (p1->carType < p2->carType)
+    {
+      return -1;
+    }
+    else if (p1->carType > p2->carType)
+    {
+      return 1;
+    }
+    else if (p1->price < p2->price)
         return -1;
     else if (p1->price > p2->price)
+        return 1;
+    else
+        return 0;
+}
+
+int compare_rating(const void *v1, const void *v2){ 
+    const carOwner *p1 = (carOwner *)v1;
+    const carOwner *p2 = (carOwner *)v2;
+    if (p1->rating < p2->rating)
+        return -1;
+    else if (p1->rating > p2->rating)
         return 1;
     else
         return 0;
