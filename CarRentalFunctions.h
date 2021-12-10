@@ -98,7 +98,7 @@ void makeDeal (carOwner tempCarOwner) {
   strcpy(tempTrans.carName,       tempCarOwner.carName);
 
   //open file
-  fp = fopen ("transactions.dat", "wb");
+  fp = fopen ("transactions.dat", "ab");
 
   if (fp== NULL){
     fprintf(stderr, "\nError opened file\n");
@@ -128,7 +128,7 @@ void editTransaction (int transID) {
 
   if (RenterLoggedIn == 1) {
 
-    fp = fopen("transactions.dat", "rb");
+    fp = fopen("transactions.dat", "rb+");
     fp1 = fopen("temp.dat", "wb");
     
     while (1) {
@@ -139,7 +139,7 @@ void editTransaction (int transID) {
       }
 
       if (!strcmp(tempTrans.renterEmail , carRenter1.Email)) {
-        //pos = ftell(fp);
+        pos = ftell(fp);
         tempTrans.renterRated = 1;
 
         fwrite(&tempTrans, sizeof(tempTrans), 1, fp1);
@@ -149,28 +149,20 @@ void editTransaction (int transID) {
     //closing files and opening in reversed modes
     fclose(fp);
     fclose(fp1);
-    fp = fopen("transactions.dat", "rb+");
-    //fseek(fp, pos, SEEK_SET);
     fp1 = fopen("temp.dat", "rb");
+    fp = fopen("transactions.dat", "rb+");
+    fseek(fp, (pos - sizeof(tempTrans)), SEEK_SET);
     
-    while (1) {
-      fread(&tempTrans, sizeof(tempTrans), 1, fp1);
+    fread(&tempTrans, sizeof(tempTrans), 1, fp1);
       
-      if (feof(fp)) {
-        break;
-      }
-      if (!strcmp(tempTrans.renterEmail, carRenter1.Email)) {
+    fwrite(&tempTrans, sizeof(tempTrans), 1, fp);
 
-        fwrite(&tempTrans, sizeof(tempTrans), 1, fp);
-      }
-    }
-    
     fclose(fp);
     fclose(fp1);
   }
 
-  else if (OwnerLoggedIn == 1) {
-    fp = fopen("transactions.dat", "rb");
+  if (OwnerLoggedIn == 1) {
+    fp = fopen("transactions.dat", "rb+");
     fp1 = fopen("temp.dat", "wb");
 
     while (1) {
@@ -183,6 +175,7 @@ void editTransaction (int transID) {
       if (!strcmp(tempTrans.ownerEmail , carOwner1.Email)) {
         pos = ftell(fp);
         tempTrans.ownerRated = 1;
+
         fwrite(&tempTrans, sizeof(tempTrans), 1, fp1);
       }
     }
@@ -190,21 +183,14 @@ void editTransaction (int transID) {
     //closing files and opening in reversed modes
     fclose(fp);
     fclose(fp1);
-    fp = fopen("transactions.dat", "rb+");
-    fseek(fp, pos, SEEK_SET);
     fp1 = fopen("temp.dat", "rb");
+    fp = fopen("transactions.dat", "rb+");
+    fseek(fp, (pos - sizeof(tempTrans)), SEEK_SET);
     
-    while (1) {
-      fread(&tempTrans, sizeof(tempTrans), 1, fp1);
+    fread(&tempTrans, sizeof(tempTrans), 1, fp1);
       
-      if (feof(fp)) {
-        break;
-      }
-      if (!strcmp(tempTrans.ownerEmail, carOwner1.Email)) {
-        
-        fwrite(&tempTrans, sizeof(tempTrans), 1, fp);
-      }
-    }
+    fwrite(&tempTrans, sizeof(tempTrans), 1, fp);
+
     fclose(fp);
     fclose(fp1);
   }
@@ -216,9 +202,9 @@ void userRating(char userEmail[], char ans, tranDet tempTrans) {
   FILE      *fp1;
   carRenter tempCarRenter;
   carOwner  tempCarOwner;
-  int found = 0;
-  double rate;
-  long int pos;
+  int       found = 0;
+  double    rate;
+  long int  pos;
   //If the person rating is a renter, the person that has to be rated is an owner, therefore open owner.dat
 
   // read file contents till end of file
@@ -226,7 +212,7 @@ void userRating(char userEmail[], char ans, tranDet tempTrans) {
 
   if (ans == 'a') {
 
-    fp = fopen ("owners.dat", "rb");
+    fp = fopen ("owners.dat", "rb+");
 
     if (fp == NULL){
       fprintf(stderr, "\nError opening file\n");
@@ -256,8 +242,6 @@ void userRating(char userEmail[], char ans, tranDet tempTrans) {
         tempCarOwner.ratingAmount++;
 
         fwrite(&tempCarOwner, sizeof(tempCarOwner), 1, fp1);
-
-        editTransaction(tempTrans.transactionID);
       }
     }
     fclose(fp);
@@ -265,7 +249,7 @@ void userRating(char userEmail[], char ans, tranDet tempTrans) {
 
   if (ans == 'b') {
 
-    fp = fopen ("renters.dat", "rb");
+    fp = fopen ("renters.dat", "rb+");
 
     if (fp == NULL){
       fprintf(stderr, "\nError opening file\n");
@@ -295,8 +279,6 @@ void userRating(char userEmail[], char ans, tranDet tempTrans) {
         tempCarRenter.ratingAmount++;
 
         fwrite(&tempCarRenter, sizeof(tempCarRenter), 1, fp1);
-
-        editTransaction(tempTrans.transactionID);
       }
     }
     fclose(fp);
@@ -304,42 +286,42 @@ void userRating(char userEmail[], char ans, tranDet tempTrans) {
 
   fclose(fp1);
 
-  if (ans == 'a') {
+  if (ans == 'a' && found == 1) {
     
-    fp = fopen("owners.dat","wb");
+    fp = fopen("owners.dat","rb+");
 
     //moves the file pointer to the desired user
-    fseek(fp, pos, SEEK_SET);
+    fseek(fp, (pos - sizeof(tempCarOwner)), SEEK_SET);
 
     fp1 = fopen ("temp.dat","rb");
 
-    while (1) {
-      fread(&tempCarOwner, sizeof(tempCarOwner), 1, fp1);
+    
+    fread(&tempCarOwner, sizeof(tempCarOwner), 1, fp1);
 
-      if (feof(fp1)) {
-        break;
-      }
-      fwrite(&tempCarOwner, sizeof(tempCarOwner), 1, fp);
-    }
+
+    fwrite(&tempCarOwner, sizeof(tempCarOwner), 1, fp);
+    
+
+    editTransaction(tempTrans.transactionID);
   }
 
-  if (ans == 'b')  {
+  else if (ans == 'b' && found == 1)  {
     
-    fp = fopen("renters.dat", "wb");
+    fp = fopen("renters.dat", "rb+");
     
     //moves the file pointer to the desired user
-    fseek(fp, pos, SEEK_SET);
+    fseek(fp, (pos - sizeof(tempCarRenter)), SEEK_SET);
 
     fp1 = fopen("temp.dat", "rb");
 
-    while (1) {
+  
       fread(&tempCarRenter, sizeof(tempCarRenter), 1, fp1);
 
-      if (feof(fp1)) {
-        break;
-      }
+   
       fwrite(&tempCarRenter, sizeof(tempCarRenter), 1, fp);
-    }
+    
+
+    editTransaction(tempTrans.transactionID);
   }
 
   else if (found == 0) {
@@ -402,7 +384,7 @@ void findTransaction (void) {
       foundTrans = tempTrans;
     }
 
-    else {
+    else if (found == 0){
       printf("\nNo unrated deals found");
     }
   }
