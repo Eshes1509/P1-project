@@ -120,7 +120,7 @@ void makeDeal (carOwner tempCarOwner) {
 }
 
 //Function that enables a user to rate another, if they have had a deal with them
-void userRating(char userEmail[], char ans) {
+void userRating(char userEmail[], char ans, tranDet tempTrans) {
   FILE      *fp;
   FILE      *fp1;
   carRenter tempCarRenter;
@@ -163,7 +163,10 @@ void userRating(char userEmail[], char ans) {
 
         tempCarOwner.rating = ((tempCarOwner.rating * tempCarOwner.ratingAmount + rate) / ((double)tempCarOwner.ratingAmount + 1.00));
         tempCarOwner.ratingAmount++;
+
         fwrite(&tempCarOwner, sizeof(tempCarOwner), 1, fp1);
+
+        //Insert transaction editing function here
       }
     }
     fclose(fp);
@@ -201,6 +204,8 @@ void userRating(char userEmail[], char ans) {
         tempCarRenter.ratingAmount++;
 
         fwrite(&tempCarRenter, sizeof(tempCarRenter), 1, fp1);
+
+        //Insert transaction editing function
       }
     }
     fclose(fp);
@@ -328,11 +333,11 @@ void findTransaction (void) {
     printf("\n");
 
     if (ans == 'a' && ans2 == 'y') {
-      userRating (tempTrans.ownerEmail, ans);
+      userRating (tempTrans.ownerEmail, ans, tempTrans);
     }
 
     else if (ans == 'b' && ans2 == 'y') {
-      userRating (tempTrans.renterEmail, ans);
+      userRating (tempTrans.renterEmail, ans, tempTrans);
     }
 
     else if (ans2 == 'n') {
@@ -342,4 +347,92 @@ void findTransaction (void) {
     } while(ans2 != 'y' && ans2 != 'n');
   }  
 
+}
+
+void editTransaction (int transID, carOwner tempCarOwner) {
+
+  FILE *fp;
+  FILE *fp1;
+  long int pos;
+  tranDet tempTrans;
+
+  if (RenterLoggedIn == 1) {
+
+    fp = fopen("transactions.dat", "rb");
+    fp1 = fopen("temp.dat", "wb");
+
+    while (1) {
+      fread(&tempTrans, sizeof(tempTrans), 1, fp);
+      
+      if (feof(fp)) {
+        break;
+      }
+
+      if (!strcmp(tempTrans.renterEmail , carRenter1.Email)) {
+        pos = ftell(fp);
+
+        fwrite(&tempTrans, sizeof(tempTrans), 1, fp1);
+      }
+    }
+
+    //closing files and opening in reversed modes
+    fclose(fp);
+    fclose(fp1);
+    fp = fopen("transactions.dat", "wb");
+    fseek(fp, pos, SEEK_SET);
+    fp1 = fopen("temp.dat", "rb");
+    
+    while (1) {
+      fread(&tempTrans, sizeof(tempTrans), 1, fp1);
+      
+      if (feof(fp)) {
+        break;
+      }
+      if (!strcmp(tempTrans.renterEmail, carRenter1.Email)) {
+
+        fwrite(&tempTrans, sizeof(tempTrans), 1, fp);
+      }
+    }
+  }
+
+  else if (OwnerLoggedIn == 1) {
+    fp = fopen("transactions.dat", "rb");
+    fp1 = fopen("temp.dat", "wb");
+
+    while (1) {
+      fread(&tempTrans, sizeof(tempTrans), 1, fp);
+      
+      if (feof(fp)) {
+        break;
+      }
+
+      if (!strcmp(tempTrans.renterEmail , tempCarOwner.Email)) {
+        pos = ftell(fp);
+
+        fwrite(&tempTrans, sizeof(tempTrans), 1, fp1);
+      }
+    }
+
+    //closing files and opening in reversed modes
+    fclose(fp);
+    fclose(fp1);
+    fp = fopen("transactions.dat", "wb");
+    fseek(fp, pos, SEEK_SET);
+    fp1 = fopen("temp.dat", "rb");
+    
+    while (1) {
+      fread(&tempTrans, sizeof(tempTrans), 1, fp1);
+      
+      if (feof(fp)) {
+        break;
+      }
+      if (!strcmp(tempTrans.renterEmail, carRenter1.Email)) {
+
+        fwrite(&tempTrans, sizeof(tempTrans), 1, fp);
+      }
+    }
+
+
+
+  }
 }
