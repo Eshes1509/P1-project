@@ -500,8 +500,8 @@ void carSelect(carOwner arrCars[]){
     {
       for(i = 0; i < number_of_cars; i++){
         printf("\n%d.", i + 1);
-        printf("\nPrice: %d\nCar name: %s\nCar type: %c\nModel year: %d\nOdometer: %d\nTransmission type: %c\nCar description: %s\nCar is located in: %d\n", 
-        arrCars[i].price, arrCars[i].carName, arrCars[i].carType, arrCars[i].modelYear, arrCars[i].odometer, arrCars[i].transmission, arrCars[i].CarDescription, arrCars[i].postCode);
+        printf("\nPrice: %d\nCar name: %s\nCar type: %c\nModel year: %d\nOdometer: %d\nTransmission type: %c\nCar description: %s\n", 
+        arrCars[i].price, arrCars[i].carName, arrCars[i].carType, arrCars[i].modelYear, arrCars[i].odometer, arrCars[i].transmission, arrCars[i].CarDescription);
       }
 
       printf("\nChoose which car you would like to rent: ");
@@ -509,8 +509,8 @@ void carSelect(carOwner arrCars[]){
 
       choice = choice - 1;
 
-      printf("\nPrice: %d\nCar name: %s\nCar type: %c\nModel year: %d\nOdometer: %d\nTransmission type: %c\nCar description: %s\nCar is located in: %d\n", 
-      arrCars[choice].price, arrCars[choice].carName, arrCars[choice].carType, arrCars[choice].modelYear, arrCars[choice].odometer, arrCars[choice].transmission, arrCars[choice].CarDescription, arrCars[choice].postCode);
+      printf("\nPrice: %d\nCar name: %s\nCar type: %c\nModel year: %d\nOdometer: %d\nTransmission type: %c\nCar description: %s\n", 
+      arrCars[choice].price, arrCars[choice].carName, arrCars[choice].carType, arrCars[choice].modelYear, arrCars[choice].odometer, arrCars[choice].transmission, arrCars[choice].CarDescription);
 
       printf("\nWould you like to rent this car? (1 = Yes, 2 = No): ");
       scanf(" %d", &rent_car);
