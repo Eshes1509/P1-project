@@ -106,7 +106,7 @@ carRenter carRenterData() {
     tempCarRenter = enterCarRenter();
 
     // open file for writing
-    fp = fopen ("renters.dat", "a");
+    fp = fopen ("renters.dat", "ab");
     if (fp == NULL){
       fprintf(stderr, "\nError opened file\n");
       exit (1);
@@ -184,7 +184,7 @@ carOwner carOwnerData() {
     tempCarOwner = enterCarOwner();
 
     // open file for writing
-    fp = fopen ("owners.dat", "a");
+    fp = fopen ("owners.dat", "ab");
     if (fp== NULL){
       fprintf(stderr, "\nError opened file\n");
       exit (1);
