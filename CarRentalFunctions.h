@@ -355,7 +355,7 @@ carRenter carRenterEdit(carRenter carRenter1){
       }
       if(!strcmp(tempCarRenter.Email, carRenter1.Email)){
         found = 1;
-        enterCarRenter();
+        tempCarRenter = enterCarRenter();
         fwrite(&tempCarRenter, sizeof(tempCarRenter), 1, fp1);
       }
       else{
@@ -505,7 +505,7 @@ int compare_rating(const void *v1, const void *v2){
 void carSelect(carOwner arrCars[]){
     FILE *fp;
     carOwner tempCarOwner;
-    int i = 0, number_of_cars, choice, rent_car;
+    int i = 0, number_of_cars, choice, rent_car, number_of_hours;
 
     fp = fopen ("owners.dat", "rb");
     if (fp == NULL)
@@ -538,7 +538,7 @@ void carSelect(carOwner arrCars[]){
       printf("\nChoose which car you would like to rent: ");
       scanf(" %d", &choice);
 
-      choice = choice - 1;
+      choice--;
 
       printf("\nPrice: %d\nCar name: %s\nCar type: %c\nModel year: %d\nOdometer: %d\nTransmission type: %c\nCar description: %s\nCar is located in: %d\n", 
       arrCars[choice].price, arrCars[choice].carName, arrCars[choice].carType, arrCars[choice].modelYear, arrCars[choice].odometer, arrCars[choice].transmission, arrCars[choice].CarDescription, arrCars[choice].postCode);
@@ -546,9 +546,13 @@ void carSelect(carOwner arrCars[]){
       printf("\nWould you like to rent this car? (1 = Yes, 2 = No): ");
       scanf(" %d", &rent_car);
 
+      printf("\nHow many hours would you like to rent this car? ");
+      scanf(" %d", &number_of_hours);
+
       if (rent_car == 1)
       {
         printf("You successfully chose %s\n", arrCars[choice].carName);
+        printf("It will cost you %d dkk to rent this car for %d hours\n", arrCars[choice].price * number_of_hours, number_of_hours);
         makeDeal(arrCars[choice]);
       }
     } while (rent_car != 1);
@@ -817,10 +821,10 @@ void findTransaction (void) {
       found = 1;
       foundTrans = tempTrans;
     }
+  }
 
-    else if (found == 0){
-      printf("\nNo unrated deals found");
-    }
+  if (found == 0){
+    printf("\nNo unrated deals found");
   }
 
   // close file
