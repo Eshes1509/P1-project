@@ -68,7 +68,7 @@ int main(void) {
   
         switch (answer) {
           case 1:
-            
+            show_rentals();
             break;
           
           case 2:

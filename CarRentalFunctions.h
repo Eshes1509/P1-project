@@ -766,3 +766,24 @@ void carSelect(carOwner arrCars[]) {
   
   fclose(fp);
 }
+
+void show_rentals(void) {
+  FILE *fp;
+  tranDet tempTrans;
+  int n = 1;
+
+  fp = fopen("transactions.dat", "rb");
+
+  printf("Here is your rental history: \n");
+
+  while(1){
+    fread(&tempTrans, sizeof(tempTrans), 1, fp);
+    if(feof(fp)){
+      break;
+    }
+    if(!strcmp(carOwner1.Email, tempTrans.ownerEmail)){
+      printf("%d.\n", n++);
+      printf("Transaction ID: %d\nRenter's name: %s\nRenter's email: %s\n", tempTrans.transactionID, tempTrans.renterName, tempTrans.renterEmail);
+    }
+  }
+}
