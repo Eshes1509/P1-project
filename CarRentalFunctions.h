@@ -439,64 +439,6 @@ int compare_rating(const void *v1, const void *v2){
         return 0;
 }
 
-void carSelect(carOwner arrCars[]){
-    FILE *fp;
-    carOwner tempCarOwner;
-    int i = 0, number_of_cars, choice, rent_car, number_of_hours;
-
-    fp = fopen ("owners.dat", "rb");
-    if (fp == NULL)
-    {
-    	fprintf(stderr, "\nError opening file\n");
-    	exit (1);
-    }
-
-    while(1){
-      fread(&tempCarOwner, sizeof(tempCarOwner), 1, fp);
-      if(feof(fp)){
-        number_of_cars = i;
-        break;
-      }
-      
-      arrCars[i] = tempCarOwner;
-      i++;
-    }
-
-    qsort(arrCars, number_of_cars, sizeof(carOwner), compare_type_and_price);
-
-    do
-    {
-      for(i = 0; i < number_of_cars; i++){
-        printf("\n%d.", i + 1);
-        printf("\nPrice: %d\nCar name: %s\nCar type: %c\nModel year: %d\nOdometer: %d\nTransmission type: %c\nCar description: %s\nCar is located in: %d\n", 
-        arrCars[i].price, arrCars[i].carName, arrCars[i].carType, arrCars[i].modelYear, arrCars[i].odometer, arrCars[i].transmission, arrCars[i].CarDescription, arrCars[i].postCode);
-      }
-
-      printf("\nChoose which car you would like to rent: ");
-      scanf(" %d", &choice);
-
-      choice--;
-
-      printf("\nPrice: %d\nCar name: %s\nCar type: %c\nModel year: %d\nOdometer: %d\nTransmission type: %c\nCar description: %s\nCar is located in: %d\n", 
-      arrCars[choice].price, arrCars[choice].carName, arrCars[choice].carType, arrCars[choice].modelYear, arrCars[choice].odometer, arrCars[choice].transmission, arrCars[choice].CarDescription, arrCars[choice].postCode);
-
-      printf("\nWould you like to rent this car? (1 = Yes, 2 = No): ");
-      scanf(" %d", &rent_car);
-
-      printf("\nHow many hours would you like to rent this car? ");
-      scanf(" %d", &number_of_hours);
-
-      if (rent_car == 1)
-      {
-        printf("You successfully chose %s\n", arrCars[choice].carName);
-        printf("It will cost you %d dkk to rent this car for %d hours\n", arrCars[choice].price * number_of_hours, number_of_hours);
-        makeDeal(arrCars[choice]);
-      }
-    } while (rent_car != 1);
-    
-    fclose(fp);
-}
-
 void editTransaction (int transID) {
 
   FILE *fp;
@@ -797,5 +739,63 @@ void findTransaction (void) {
 
     } while(ans2 != 'y' && ans2 != 'n');
   }  
+}
 
+void carSelect(carOwner arrCars[]){
+    FILE *fp;
+    carOwner tempCarOwner;
+    int i = 0, number_of_cars, choice, rent_car, number_of_hours;
+
+    fp = fopen ("owners.dat", "rb");
+    if (fp == NULL)
+    {
+    	fprintf(stderr, "\nError opening file\n");
+    	exit (1);
+    }
+
+    while(1){
+      fread(&tempCarOwner, sizeof(tempCarOwner), 1, fp);
+      if(feof(fp)){
+        number_of_cars = i;
+        break;
+      }
+      
+      arrCars[i] = tempCarOwner;
+      i++;
+    }
+
+    qsort(arrCars, number_of_cars, sizeof(carOwner), compare_type_and_price);
+
+    do
+    {
+      for(i = 0; i < number_of_cars; i++){
+        printf("\n%d.", i + 1);
+        printf("\nPrice: %d\nCar name: %s\nCar type: %c\nModel year: %d\nOdometer: %d\nTransmission type: %c\nCar description: %s\nCar is located in: %d\n", 
+        arrCars[i].price, arrCars[i].carName, arrCars[i].carType, arrCars[i].modelYear, arrCars[i].odometer, arrCars[i].transmission, arrCars[i].CarDescription, arrCars[i].postCode);
+      }
+
+      printf("\nChoose which car you would like to rent: ");
+      scanf(" %d", &choice);
+
+      choice--;
+
+      printf("\nPrice: %d\nCar name: %s\nCar type: %c\nModel year: %d\nOdometer: %d\nTransmission type: %c\nCar description: %s\nCar is located in: %d\n", 
+      arrCars[choice].price, arrCars[choice].carName, arrCars[choice].carType, arrCars[choice].modelYear, arrCars[choice].odometer, arrCars[choice].transmission, arrCars[choice].CarDescription, arrCars[choice].postCode);
+
+      printf("\nWould you like to rent this car? (1 = Yes, 2 = No): ");
+      scanf(" %d", &rent_car);
+
+      printf("\nHow many hours would you like to rent this car? ");
+      scanf(" %d", &number_of_hours);
+
+      if (rent_car == 1)
+      {
+        printf("You successfully chose %s\n", arrCars[choice].carName);
+        printf("It will cost you %d dkk to rent this car for %d hours\n", arrCars[choice].price * number_of_hours, number_of_hours);
+        makeDeal(arrCars[choice]);
+        findTransaction();
+      }
+    } while (rent_car != 1);
+    
+    fclose(fp);
 }

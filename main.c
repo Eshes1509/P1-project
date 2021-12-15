@@ -31,7 +31,7 @@ int main(void) {
     if(isRenter == 1){
       printf("Welcome back %s!\n", carRenter1.name);
       
-      printf("1. Rent a car\n2. View your profile\n3. Edit your profile\n4. Rate your latest Rental\n");
+      printf("1. Rent a car\n2. View your profile\n3. Edit your profile\n");
       do{
         scanf("%d", &answer);  
       } while(answer < 1 && answer > 4);
@@ -47,10 +47,6 @@ int main(void) {
 
         case 3:
           carRenterEdit(carRenter1);
-          break;
-        
-        case 4:
-          findTransaction();
           break;
         
         default:
