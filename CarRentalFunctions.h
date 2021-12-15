@@ -250,21 +250,21 @@ int userSelect(char Email[]){
   return -1;
 }
 
-carRenter carRenterDisplay(carRenter carRenter1){
+carRenter carRenterDisplay(void){
 
   printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nPreferred car type: %c\nPreferred transmission type: %c\nRating: %0.2lf (%d Ratings)\n",
   carRenter1.name, carRenter1.phoneNum, carRenter1.Email, carRenter1.age, carRenter1.postCode, carRenter1.prefCarType, carRenter1.prefTransmissionType, carRenter1.rating, carRenter1.ratingAmount);   
 
 }
 
-carOwner carOwnerDisplay(carOwner carOwner1){
+carOwner carOwnerDisplay(void){
 
   printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nCar price: %d dkk per hour\nCar name: %s\nModel year: %d\nKilometers driven: %d\nTransmission type: %c\nDescription: %s\nRating: %0.2lf (%d ratings)",
   carOwner1.name, carOwner1.phoneNum, carOwner1.Email, carOwner1.age, carOwner1.postCode, carOwner1.price, carOwner1.carName, carOwner1.modelYear, carOwner1.odometer, carOwner1.transmission, carOwner1.CarDescription, carOwner1.rating, carOwner1.ratingAmount);   
 
 }
 
-carRenter carRenterEdit(carRenter carRenter1){
+carRenter carRenterEdit(void){
   FILE *fp, *fp1;
   carRenter tempCarRenter;
   int found = 0;
@@ -304,7 +304,7 @@ carRenter carRenterEdit(carRenter carRenter1){
   fclose(fp1);    
 }
 
-carOwner carOwnerEdit(carOwner carOwner1){
+carOwner carOwnerEdit(void){
   FILE *fp, *fp1;
   carOwner tempCarOwner;
   int found = 0;
@@ -753,10 +753,10 @@ void carSelect(carOwner arrCars[]) {
     arrCars[choice].price, arrCars[choice].carName, arrCars[choice].carType, arrCars[choice].modelYear, arrCars[choice].odometer, arrCars[choice].transmission, arrCars[choice].CarDescription, arrCars[choice].postCode);
     printf("\nWould you like to rent this car? (1 = Yes, 2 = No): ");
     scanf(" %d", &rent_car);
-    printf("\nHow many hours would you like to rent this car? ");
-    scanf(" %d", &number_of_hours);
-    if (rent_car == 1)
-    {
+   
+    if (rent_car == 1) {
+      printf("\nHow many hours would you like to rent this car? ");
+      scanf(" %d", &number_of_hours);
       printf("You successfully chose %s\n", arrCars[choice].carName);
       printf("It will cost you %d dkk to rent this car for %d hours\n", arrCars[choice].price * number_of_hours, number_of_hours);
       makeDeal(arrCars[choice]);

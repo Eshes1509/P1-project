@@ -30,56 +30,65 @@ int main(void) {
     
     if(isRenter == 1){
       printf("Welcome back %s!\n", carRenter1.name);
-      
-      printf("1. Rent a car\n2. View your profile\n3. Edit your profile\n");
-      do{
-        scanf("%d", &answer);  
-      } while(answer < 1 && answer > 4);
+      while(1){
+        printf("\n1. Rent a car\n2. View your profile\n3. Edit your profile\n4. Exit\n");
+        do{
+          scanf("%d", &answer);  
+        } while(answer < 1 && answer > 4);
+  
+        switch (answer) {
+          case 1:
+            carSelect(arrCars);
+            break;
+          
+          case 2:
+            carRenterDisplay();
+            break;
+  
+          case 3:
+            carRenterEdit();
+            break;
 
-      switch (answer) {
-        case 1:
-          carSelect(arrCars);
-          break;
-        
-        case 2:
-          carRenterDisplay(carRenter1);
-          break;
+          case 4:
+            return EXIT_SUCCESS;
 
-        case 3:
-          carRenterEdit(carRenter1);
-          break;
-        
-        default:
-          break;
+          default:
+            break;
+        }
       }
     }
     else if(isRenter == 0) {
       printf("Welcome back %s!\n", carOwner1.name);
 
-      printf("1. View your car rental history\n2. View your profile\n3. Edit your profile\n4. Rate your latest Rental\n");
-      do{
-        scanf("%d", &answer);  
-      } while(answer < 1 && answer > 4);
+      while(1){
+        printf("\n1. View your car rental history\n2. View your profile\n3. Edit your profile\n4. Rate your latest Rental\n5. Exit\n");
+        do{
+          scanf("%d", &answer);  
+        } while(answer < 1 && answer > 5);
+  
+        switch (answer) {
+          case 1:
+            
+            break;
+          
+          case 2:
+            carOwnerDisplay();
+            break;
+  
+          case 3:
+            carOwnerEdit();
+            break;
+          
+          case 4:
+            findTransaction();
+            break;
 
-      switch (answer) {
-        case 1:
-          //Implement list of transactions - overskudsting
-          break;
-        
-        case 2:
-          carOwnerDisplay(carOwner1);
-          break;
+          case 5:
+            return EXIT_SUCCESS;
 
-        case 3:
-          carOwnerEdit(carOwner1);
-          break;
-        
-        case 4:
-          findTransaction();
-          break;
-
-        default:
-          break;
+          default:
+            break;
+        }
       }
     }
   }
