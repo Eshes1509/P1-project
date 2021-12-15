@@ -55,20 +55,16 @@ bool          RenterLoggedIn = 0;
 bool          OwnerLoggedIn = 0;
 
 void getName (char name[]) {
-    char *fullName = (char*) malloc(50);
-
-    /*Checks if memory allocation was sucessfull*/
-    if (fullName == NULL) {
-        printf("Memory allocation failed");
-        exit(0);
-    }
-
-    //Is able to obtain a string including spaces
-    gets(fullName);
-
-    strcpy(name, fullName);
-
-    free(fullName);
+  char *fullName = (char*) malloc(50);
+  /*Checks if memory allocation was sucessfull*/
+  if (fullName == NULL) {
+      printf("Memory allocation failed");
+      exit(0);
+  }
+  //Is able to obtain a string including spaces
+  gets(fullName);
+  strcpy(name, fullName);
+  free(fullName);
 }
 
 carRenter enterCarRenter(void) {
@@ -101,28 +97,26 @@ carRenter enterCarRenter(void) {
 
 //The function that fetches data for a car renter
 carRenter carRenterData() {
-    FILE *fp;
-    carRenter tempCarRenter;
-    
-    tempCarRenter = enterCarRenter();
+  FILE *fp;
+  carRenter tempCarRenter;
+  
+  tempCarRenter = enterCarRenter();
+  // open file for writing
+  fp = fopen ("renters.dat", "ab");
+  if (fp == NULL) {
+    fprintf(stderr, "\nError opened file\n");
+    exit (1);
+  }
+  
+  // write struct to file
+  fwrite (&tempCarRenter, sizeof(tempCarRenter), 1, fp);
+  if(fwrite != 0)
+    printf("Account succesfully created !\n");
+  else
+    printf("Error writing to file !\n");
 
-    // open file for writing
-    fp = fopen ("renters.dat", "ab");
-    if (fp == NULL) {
-      fprintf(stderr, "\nError opened file\n");
-      exit (1);
-    }
-    
-    // write struct to file
-    fwrite (&tempCarRenter, sizeof(tempCarRenter), 1, fp);
-
-    if(fwrite != 0)
-      printf("Account succesfully created !\n");
-    else
-      printf("Error writing to file !\n");
- 
-    // close file
-    fclose (fp);
+  // close file
+  fclose (fp);
 }
 
 carOwner enterCarOwner(void) {
@@ -179,94 +173,87 @@ carOwner enterCarOwner(void) {
 }
 //The function that fetches data for a car owner
 carOwner carOwnerData() {
-    FILE *fp;
-    carOwner tempCarOwner;
+  FILE *fp;
+  carOwner tempCarOwner;
+  tempCarOwner = enterCarOwner();
+  // open file for writing
+  fp = fopen ("owners.dat", "ab");
+  if (fp== NULL) {
+    fprintf(stderr, "\nError opened file\n");
+    exit (1);
+  }
+  
+  // write struct to file
+  fwrite (&tempCarOwner, sizeof(tempCarOwner), 1, fp);
+  if(fwrite != 0)
+    printf("Account succesfully created !\n");
+  else
+    printf("Error writing to file !\n");
 
-    tempCarOwner = enterCarOwner();
-
-    // open file for writing
-    fp = fopen ("owners.dat", "ab");
-    if (fp== NULL) {
-      fprintf(stderr, "\nError opened file\n");
-      exit (1);
-    }
-    
-    // write struct to file
-    fwrite (&tempCarOwner, sizeof(tempCarOwner), 1, fp);
-
-    if(fwrite != 0)
-      printf("Account succesfully created !\n");
-    else
-      printf("Error writing to file !\n");
- 
-    // close file
-    fclose (fp);
+  // close file
+  fclose (fp);
 }
 
 int userSelect(char Email[]){
-    FILE *fp, *fp1;
-    carRenter tempCarRenter;
-    carOwner tempCarOwner;
-    int found = 0;
-    
-    // Open renters.dat for reading
-    fp = fopen ("renters.dat", "rb");
-    if (fp == NULL) {
-    	fprintf(stderr, "\nError opening file\n");
-    	exit (1);
+  FILE *fp, *fp1;
+  carRenter tempCarRenter;
+  carOwner tempCarOwner;
+  int found = 0;
+  
+  // Open renters.dat for reading
+  fp = fopen ("renters.dat", "rb");
+  if (fp == NULL) {
+  	fprintf(stderr, "\nError opening file\n");
+  	exit (1);
+  }
+  // Open owners.dat for reading
+  fp1 = fopen ("owners.dat", "rb");
+  if (fp1 == NULL) {
+  	fprintf(stderr, "\nError opening file\n");
+  	exit (1);
+  }
+  // read file contents till end of file
+  while(1){
+    fread(&tempCarRenter, sizeof(tempCarRenter), 1, fp);    
+    if(feof(fp)){
+      break;
     }
-    // Open owners.dat for reading
-    fp1 = fopen ("owners.dat", "rb");
-    if (fp1 == NULL) {
-    	fprintf(stderr, "\nError opening file\n");
-    	exit (1);
+    if(!strcmp(tempCarRenter.Email, Email)){
+      found = 1;
+      RenterLoggedIn = 1;
+      carRenter1 = tempCarRenter;
+      fclose(fp);
+      fclose(fp1);
+      return 1;
+    }	
+  }
+  while(1){
+    fread(&tempCarOwner, sizeof(tempCarOwner), 1, fp1);    
+    if(feof(fp1)){
+      break;
     }
-
-    // read file contents till end of file
-    while(1){
-      fread(&tempCarRenter, sizeof(tempCarRenter), 1, fp);    
-      if(feof(fp)){
-        break;
-      }
-      if(!strcmp(tempCarRenter.Email, Email)){
-        found = 1;
-        RenterLoggedIn = 1;
-        carRenter1 = tempCarRenter;
-        fclose(fp);
-        fclose(fp1);
-        return 1;
-      }	
-    }
-
-    while(1){
-      fread(&tempCarOwner, sizeof(tempCarOwner), 1, fp1);    
-      if(feof(fp1)){
-        break;
-      }
-      if(!strcmp(tempCarOwner.Email, Email)){
-        found = 1;
-        OwnerLoggedIn = 1;
-        carOwner1 = tempCarOwner;
-        fclose(fp);
-        fclose(fp1);        
-        return 0; 
-      }	
-    }    
-
-    if(found == 0){
-      printf("Sorry no record found\n");
-    }
-
-    // close file
-    fclose (fp);   
-    fclose (fp1); 
-    return -1;
+    if(!strcmp(tempCarOwner.Email, Email)){
+      found = 1;
+      OwnerLoggedIn = 1;
+      carOwner1 = tempCarOwner;
+      fclose(fp);
+      fclose(fp1);        
+      return 0; 
+    }	
+  }    
+  if(found == 0){
+    printf("Sorry no record found\n");
+  }
+  // close file
+  fclose (fp);   
+  fclose (fp1); 
+  return -1;
 }
 
 carRenter carRenterDisplay(carRenter carRenter1){
 
-    printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nPreferred car type: %c\nPreferred transmission type: %c\nRating: %0.2lf (%d Ratings)\n",
-    carRenter1.name, carRenter1.phoneNum, carRenter1.Email, carRenter1.age, carRenter1.postCode, carRenter1.prefCarType, carRenter1.prefTransmissionType, carRenter1.rating, carRenter1.ratingAmount);   
+  printf ("Name: %s\nPhone number: %s\nEmail: %s\nAge: %d\nPostcode: %d\nPreferred car type: %c\nPreferred transmission type: %c\nRating: %0.2lf (%d Ratings)\n",
+  carRenter1.name, carRenter1.phoneNum, carRenter1.Email, carRenter1.age, carRenter1.postCode, carRenter1.prefCarType, carRenter1.prefTransmissionType, carRenter1.rating, carRenter1.ratingAmount);   
 
 }
 
@@ -278,93 +265,83 @@ carOwner carOwnerDisplay(carOwner carOwner1){
 }
 
 carRenter carRenterEdit(carRenter carRenter1){
-    FILE *fp, *fp1;
-    carRenter tempCarRenter;
-    int found = 0;
-
-    fp = fopen("renters.dat","rb");
-    fp1 = fopen("temp.dat","wb");
-
-    while(1){
-      fread(&tempCarRenter, sizeof(tempCarRenter), 1, fp);
-      if(feof(fp)){
-        break;
-      }
-      if(!strcmp(tempCarRenter.Email, carRenter1.Email)){
-        found = 1;
-        tempCarRenter = enterCarRenter();
-        fwrite(&tempCarRenter, sizeof(tempCarRenter), 1, fp1);
-      }
-      else{
-        fwrite(&tempCarRenter, sizeof(tempCarRenter), 1, fp1);
-      }
+  FILE *fp, *fp1;
+  carRenter tempCarRenter;
+  int found = 0;
+  fp = fopen("renters.dat","rb");
+  fp1 = fopen("temp.dat","wb");
+  while(1){
+    fread(&tempCarRenter, sizeof(tempCarRenter), 1, fp);
+    if(feof(fp)){
+      break;
     }
-    fclose(fp);
-    fclose(fp1);
-
-    if(found == 0){
-      printf("Sorry, no record found");
+    if(!strcmp(tempCarRenter.Email, carRenter1.Email)){
+      found = 1;
+      tempCarRenter = enterCarRenter();
+      fwrite(&tempCarRenter, sizeof(tempCarRenter), 1, fp1);
     }
     else{
-      fp = fopen("renters.dat","wb");
-      fp1 = fopen("temp.dat","rb");
-
-      while(1){
-        fread(&tempCarRenter, sizeof(tempCarRenter), 1, fp1);
-
-        if(feof(fp1)){
-          break;
-        }
-        fwrite(&tempCarRenter, sizeof(tempCarRenter), 1, fp);
-      }
+      fwrite(&tempCarRenter, sizeof(tempCarRenter), 1, fp1);
     }
-    fclose(fp);
-    fclose(fp1);    
+  }
+  fclose(fp);
+  fclose(fp1);
+  if(found == 0){
+    printf("Sorry, no record found");
+  }
+  else{
+    fp = fopen("renters.dat","wb");
+    fp1 = fopen("temp.dat","rb");
+    while(1){
+      fread(&tempCarRenter, sizeof(tempCarRenter), 1, fp1);
+      if(feof(fp1)){
+        break;
+      }
+      fwrite(&tempCarRenter, sizeof(tempCarRenter), 1, fp);
+    }
+  }
+  fclose(fp);
+  fclose(fp1);    
 }
 
 carOwner carOwnerEdit(carOwner carOwner1){
-    FILE *fp, *fp1;
-    carOwner tempCarOwner;
-    int found = 0;
-
-    fp = fopen("owners.dat","rb");
-    fp1 = fopen("temp.dat","wb");
-
-    while(1){
-      fread(&tempCarOwner, sizeof(tempCarOwner), 1, fp);
-      if(feof(fp)){
-        break;
-      }
-      if(!strcmp(tempCarOwner.Email, carOwner1.Email)){
-        found = 1;
-        tempCarOwner = enterCarOwner();
-        fwrite(&tempCarOwner, sizeof(tempCarOwner), 1, fp1);
-      }
-      else{
-        fwrite(&tempCarOwner, sizeof(tempCarOwner), 1, fp1);
-      }
+  FILE *fp, *fp1;
+  carOwner tempCarOwner;
+  int found = 0;
+  fp = fopen("owners.dat","rb");
+  fp1 = fopen("temp.dat","wb");
+  while(1){
+    fread(&tempCarOwner, sizeof(tempCarOwner), 1, fp);
+    if(feof(fp)){
+      break;
     }
-    fclose(fp);
-    fclose(fp1);
-
-    if(found == 0){
-      printf("Sorry, no record found");
+    if(!strcmp(tempCarOwner.Email, carOwner1.Email)){
+      found = 1;
+      tempCarOwner = enterCarOwner();
+      fwrite(&tempCarOwner, sizeof(tempCarOwner), 1, fp1);
     }
     else{
-      fp = fopen("owners.dat","wb");
-      fp1 = fopen("temp.dat","rb");
-
-      while(1){
-        fread(&tempCarOwner, sizeof(tempCarOwner), 1, fp1);
-
-        if(feof(fp1)){
-          break;
-        }
-        fwrite(&tempCarOwner, sizeof(tempCarOwner), 1, fp);
-      }
+      fwrite(&tempCarOwner, sizeof(tempCarOwner), 1, fp1);
     }
-    fclose(fp);
-    fclose(fp1);    
+  }
+  fclose(fp);
+  fclose(fp1);
+  if(found == 0){
+    printf("Sorry, no record found");
+  }
+  else{
+    fp = fopen("owners.dat","wb");
+    fp1 = fopen("temp.dat","rb");
+    while(1){
+      fread(&tempCarOwner, sizeof(tempCarOwner), 1, fp1);
+      if(feof(fp1)){
+        break;
+      }
+      fwrite(&tempCarOwner, sizeof(tempCarOwner), 1, fp);
+    }
+  }
+  fclose(fp);
+  fclose(fp1);    
 }
 
 void makeDeal (carOwner tempCarOwner) {
@@ -410,33 +387,33 @@ void makeDeal (carOwner tempCarOwner) {
 }
 
 int compare_type_and_price(const void *v1, const void *v2){ 
-    const carOwner *p1 = (carOwner *)v1;
-    const carOwner *p2 = (carOwner *)v2;
-    if (p1->carType < p2->carType)
-    {
+  const carOwner *p1 = (carOwner *)v1;
+  const carOwner *p2 = (carOwner *)v2;
+  if (p1->carType < p2->carType)
+  {
+    return -1;
+  }
+  else if (p1->carType > p2->carType)
+  {
+    return 1;
+  }
+  else if (p1->price < p2->price)
       return -1;
-    }
-    else if (p1->carType > p2->carType)
-    {
+  else if (p1->price > p2->price)
       return 1;
-    }
-    else if (p1->price < p2->price)
-        return -1;
-    else if (p1->price > p2->price)
-        return 1;
-    else
-        return 0;
+  else
+      return 0;
 }
 
 int compare_rating(const void *v1, const void *v2){ 
-    const carOwner *p1 = (carOwner *)v1;
-    const carOwner *p2 = (carOwner *)v2;
-    if (p1->rating < p2->rating)
-        return -1;
-    else if (p1->rating > p2->rating)
-        return 1;
-    else
-        return 0;
+  const carOwner *p1 = (carOwner *)v1;
+  const carOwner *p2 = (carOwner *)v2;
+  if (p1->rating < p2->rating)
+      return -1;
+  else if (p1->rating > p2->rating)
+      return 1;
+  else
+      return 0;
 }
 
 void editTransaction (int transID) {
@@ -741,61 +718,51 @@ void findTransaction (void) {
   }  
 }
 
-void carSelect(carOwner arrCars[]){
-    FILE *fp;
-    carOwner tempCarOwner;
-    int i = 0, number_of_cars, choice, rent_car, number_of_hours;
-
-    fp = fopen ("owners.dat", "rb");
-    if (fp == NULL)
-    {
-    	fprintf(stderr, "\nError opening file\n");
-    	exit (1);
+void carSelect(carOwner arrCars[]) {
+  FILE *fp;
+  carOwner tempCarOwner;
+  int i = 0, number_of_cars, choice, rent_car, number_of_hours;
+  fp = fopen ("owners.dat", "rb");
+  if (fp == NULL)
+  {
+  	fprintf(stderr, "\nError opening file\n");
+  	exit (1);
+  }
+  while(1){
+    fread(&tempCarOwner, sizeof(tempCarOwner), 1, fp);
+    if(feof(fp)){
+      number_of_cars = i;
+      break;
     }
-
-    while(1){
-      fread(&tempCarOwner, sizeof(tempCarOwner), 1, fp);
-      if(feof(fp)){
-        number_of_cars = i;
-        break;
-      }
-      
-      arrCars[i] = tempCarOwner;
-      i++;
-    }
-
-    qsort(arrCars, number_of_cars, sizeof(carOwner), compare_type_and_price);
-
-    do
-    {
-      for(i = 0; i < number_of_cars; i++){
-        printf("\n%d.", i + 1);
-        printf("\nPrice: %d\nCar name: %s\nCar type: %c\nModel year: %d\nOdometer: %d\nTransmission type: %c\nCar description: %s\nCar is located in: %d\n", 
-        arrCars[i].price, arrCars[i].carName, arrCars[i].carType, arrCars[i].modelYear, arrCars[i].odometer, arrCars[i].transmission, arrCars[i].CarDescription, arrCars[i].postCode);
-      }
-
-      printf("\nChoose which car you would like to rent: ");
-      scanf(" %d", &choice);
-
-      choice--;
-
-      printf("\nPrice: %d\nCar name: %s\nCar type: %c\nModel year: %d\nOdometer: %d\nTransmission type: %c\nCar description: %s\nCar is located in: %d\n", 
-      arrCars[choice].price, arrCars[choice].carName, arrCars[choice].carType, arrCars[choice].modelYear, arrCars[choice].odometer, arrCars[choice].transmission, arrCars[choice].CarDescription, arrCars[choice].postCode);
-
-      printf("\nWould you like to rent this car? (1 = Yes, 2 = No): ");
-      scanf(" %d", &rent_car);
-
-      printf("\nHow many hours would you like to rent this car? ");
-      scanf(" %d", &number_of_hours);
-
-      if (rent_car == 1)
-      {
-        printf("You successfully chose %s\n", arrCars[choice].carName);
-        printf("It will cost you %d dkk to rent this car for %d hours\n", arrCars[choice].price * number_of_hours, number_of_hours);
-        makeDeal(arrCars[choice]);
-        findTransaction();
-      }
-    } while (rent_car != 1);
     
-    fclose(fp);
+    arrCars[i] = tempCarOwner;
+    i++;
+  }
+  qsort(arrCars, number_of_cars, sizeof(carOwner), compare_type_and_price);
+  do
+  {
+    for(i = 0; i < number_of_cars; i++){
+      printf("\n%d.", i + 1);
+      printf("\nPrice: %d\nCar name: %s\nCar type: %c\nModel year: %d\nOdometer: %d\nTransmission type: %c\nCar description: %s\nCar is located in: %d\n", 
+      arrCars[i].price, arrCars[i].carName, arrCars[i].carType, arrCars[i].modelYear, arrCars[i].odometer, arrCars[i].transmission, arrCars[i].CarDescription, arrCars[i].postCode);
+    }
+    printf("\nChoose which car you would like to rent: ");
+    scanf(" %d", &choice);
+    choice--;
+    printf("\nPrice: %d\nCar name: %s\nCar type: %c\nModel year: %d\nOdometer: %d\nTransmission type: %c\nCar description: %s\nCar is located in: %d\n", 
+    arrCars[choice].price, arrCars[choice].carName, arrCars[choice].carType, arrCars[choice].modelYear, arrCars[choice].odometer, arrCars[choice].transmission, arrCars[choice].CarDescription, arrCars[choice].postCode);
+    printf("\nWould you like to rent this car? (1 = Yes, 2 = No): ");
+    scanf(" %d", &rent_car);
+    printf("\nHow many hours would you like to rent this car? ");
+    scanf(" %d", &number_of_hours);
+    if (rent_car == 1)
+    {
+      printf("You successfully chose %s\n", arrCars[choice].carName);
+      printf("It will cost you %d dkk to rent this car for %d hours\n", arrCars[choice].price * number_of_hours, number_of_hours);
+      makeDeal(arrCars[choice]);
+      findTransaction();
+    }
+  } while (rent_car != 1);
+  
+  fclose(fp);
 }
