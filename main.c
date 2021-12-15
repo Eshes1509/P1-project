@@ -29,7 +29,6 @@ int main(void) {
     } while(isRenter < 0);
     
     if(isRenter == 1){
-      carRenter1 = carRenterSelect(Email);
       printf("Welcome back %s!\n", carRenter1.name);
       
       printf("1. Rent a car\n2. View your profile\n3. Edit your profile\n4. Rate your latest Rental\n");
@@ -59,7 +58,6 @@ int main(void) {
       }
     }
     else if(isRenter == 0) {
-      carOwner1 = carOwnerSelect(Email);
       printf("Welcome back %s!\n", carOwner1.name);
 
       printf("1. View your car rental history\n2. View your profile\n3. Edit your profile\n4. Rate your latest Rental\n");

@@ -98,6 +98,7 @@ carRenter enterCarRenter(void) {
   tempCarRenter.ratingAmount = 0;
   return tempCarRenter;
 }
+
 //The function that fetches data for a car renter
 carRenter carRenterData() {
     FILE *fp;
@@ -107,7 +108,7 @@ carRenter carRenterData() {
 
     // open file for writing
     fp = fopen ("renters.dat", "ab");
-    if (fp == NULL){
+    if (fp == NULL) {
       fprintf(stderr, "\nError opened file\n");
       exit (1);
     }
@@ -185,7 +186,7 @@ carOwner carOwnerData() {
 
     // open file for writing
     fp = fopen ("owners.dat", "ab");
-    if (fp== NULL){
+    if (fp== NULL) {
       fprintf(stderr, "\nError opened file\n");
       exit (1);
     }
@@ -210,15 +211,13 @@ int userSelect(char Email[]){
     
     // Open renters.dat for reading
     fp = fopen ("renters.dat", "rb");
-    if (fp == NULL)
-    {
+    if (fp == NULL) {
     	fprintf(stderr, "\nError opening file\n");
     	exit (1);
     }
     // Open owners.dat for reading
     fp1 = fopen ("owners.dat", "rb");
-    if (fp1 == NULL)
-    {
+    if (fp1 == NULL) {
     	fprintf(stderr, "\nError opening file\n");
     	exit (1);
     }
@@ -232,6 +231,7 @@ int userSelect(char Email[]){
       if(!strcmp(tempCarRenter.Email, Email)){
         found = 1;
         RenterLoggedIn = 1;
+        carRenter1 = tempCarRenter;
         fclose(fp);
         fclose(fp1);
         return 1;
@@ -246,6 +246,7 @@ int userSelect(char Email[]){
       if(!strcmp(tempCarOwner.Email, Email)){
         found = 1;
         OwnerLoggedIn = 1;
+        carOwner1 = tempCarOwner;
         fclose(fp);
         fclose(fp1);        
         return 0; 
@@ -260,70 +261,6 @@ int userSelect(char Email[]){
     fclose (fp);   
     fclose (fp1); 
     return -1;
-}
-
-carRenter carRenterSelect(char Email[]){
-    FILE *fp;
-    carRenter tempCarRenter;
-    int found = 0;
-
-    // Open renters.dat for reading
-    fp = fopen ("renters.dat", "rb");
-    if (fp == NULL)
-    {
-    	fprintf(stderr, "\nError opening file\n");
-    	exit (1);
-    }
- 
-    // read file contents till end of file
-    while(1){
-      fread(&tempCarRenter, sizeof(tempCarRenter), 1, fp);    
-      if(feof(fp)){
-        break;
-      }
-      if(!strcmp(tempCarRenter.Email, Email)){
-        found = 1;  
-        break;
-      }	
-    }
-    if(found == 0){
-      printf("Sorry no record found\n");
-    }
-    // close file
-    fclose (fp);    
-    return tempCarRenter;
-}
-
-carOwner carOwnerSelect(char Email[]){
-    FILE *fp;
-    carOwner tempCarOwner;
-    int found = 0;
-
-    // Open owners.dat for reading
-    fp = fopen ("owners.dat", "rb");
-    if (fp == NULL)
-    {
-    	fprintf(stderr, "\nError opening file\n");
-    	exit (1);
-    }
-
-    // read file contents till end of file
-    while(1){
-      fread(&tempCarOwner, sizeof(tempCarOwner), 1, fp);    
-      if(feof(fp)){
-        break;
-      }
-      if(!strcmp(tempCarOwner.Email, Email)){
-        found = 1; 
-        break; 
-      }	
-    }
-    if(found == 0){
-      printf("Sorry no record found\n");
-    }
-    // close file
-    fclose (fp);    
-    return tempCarOwner;
 }
 
 carRenter carRenterDisplay(carRenter carRenter1){
