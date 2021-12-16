@@ -150,7 +150,7 @@ carOwner enterCarOwner(void) {
   fgets   (tempCarOwner.carName, 50, stdin);
   getName (name);
   strcpy  (tempCarOwner.carName, name);
-  printf  ("Enter car type (a: city car/hatchback, b: sedan/station car, c: SUV/Van): ");
+  printf  ("Enter car type (a = city car/hatchback, b = sedan/station car, c = SUV/Van): ");
   do {
     printf("\na, b or c: ");
     tempCarOwner.carType = getchar();
