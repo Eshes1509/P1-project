@@ -41,7 +41,7 @@ typedef struct carRenterData {
   int     age; // Age of CR
   int     postCode; // Postcode of CR
   char    prefCarType; // CR's preffered car type | (a = city car/hatchback, b = sedan/station car, c = SUV/Van)
-  char    prefTransmissionType; // CR's Preffered transmission type | can be a,b or c, a = auto, b = manual, c = both
+  char    prefTransmissionType; // CR's Preferred transmission type | can be a,b or c, a = auto, b = manual, c = both
   double  rating;
   int     ratingAmount;
   // values set by program
