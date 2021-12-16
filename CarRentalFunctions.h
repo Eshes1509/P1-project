@@ -146,7 +146,6 @@ carOwner enterCarOwner(void) {
     printf("\nEnter a maximum of 100 dkk: ");
     scanf(" %d", &tempCarOwner.price);
   }
-
   printf  ("Enter name of your car: ");
   fgets   (tempCarOwner.carName, 50, stdin);
   getName (name);
@@ -161,6 +160,7 @@ carOwner enterCarOwner(void) {
   printf  ("Enter your car's mileage: ");
   scanf   ("%d", &tempCarOwner.odometer);
   printf  ("Enter your car's transmission type (a = automatic, b = manual): ");
+  fflush(stdin);
   scanf   ("%c", &tempCarOwner.transmission);
   printf  ("Enter small description of car (<100 characters): ");
   fgets   (tempCarOwner.CarDescription, 50, stdin);
