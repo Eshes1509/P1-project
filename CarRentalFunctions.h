@@ -1,21 +1,21 @@
 
 typedef struct transactionData {
-  int     transactionID;
-  int     renterID;
-  char    renterName[50];
-  char    renterEmail[50];
-  int     ownerID;
-  char    ownerName[50];
-  char    ownerEmail[50];
-  char    carName[50];
-  bool    ownerRated;
-  bool    renterRated;
+  int     transactionID; // An ID number that is linked to every transaction
+  int     renterID; // Individual ID number for the renter
+  char    renterName[50]; // Renters name
+  char    renterEmail[50]; // Renters email
+  int     ownerID; // Individual ID number for the owner
+  char    ownerName[50]; // Owners name
+  char    ownerEmail[50]; // Owners email
+  char    carName[50]; // Name of the car
+  bool    ownerRated; // Boolean data type on whether the owner has rated
+  bool    renterRated; // Boolean data type on whether the renter has rated
 } tranDet;
 
 typedef struct carOwnerData {
   // values set by user
-  int     ID;
-  char    name[50]; // Name of Cor Owner
+  int     ID; // Car owners ID number
+  char    name[50]; // Name of Car Owner
   char    phoneNum[9]; // Phone number of CO
   char    Email[50]; // Email of CO
   int     age; // age of CO
@@ -34,7 +34,7 @@ typedef struct carOwnerData {
 } carOwner;
 
 typedef struct carRenterData {
-  int     ID;
+  int     ID; // Car renters ID number
   char    name[50]; // name of Car Renter
   char    phoneNum[9]; // Phone number of CR
   char    Email[50]; // Email of CR
