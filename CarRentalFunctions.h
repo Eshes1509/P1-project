@@ -190,7 +190,7 @@ carOwner carOwnerData()
   FILE *fp;
   carOwner tempCarOwner;
   tempCarOwner = enterCarOwner();
-  // open file for writing
+  // open file for writings
   fp = fopen("owners.dat", "ab");
   if (fp == NULL)
   {
@@ -752,7 +752,7 @@ void findTransaction(void)
     printf("\nNo unrated deals found");
   }
 
-  // close file
+  // close filef
   fclose(fp);
 
   if (found == 1)
